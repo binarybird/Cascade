@@ -113,32 +113,31 @@ namespace Cascade.Core.Simulator.Visitors
             {
                 depth = _callStack.Count;
             }
-            
-            Stack<Frame>.Enumerator enumerator = _callStack.GetEnumerator();
 
             IEnumerable<Instance> ret = null;
-            while (ret == null && enumerator.MoveNext() && depth > 0)
+            using (Stack<Frame>.Enumerator enumerator = _callStack.GetEnumerator())
             {
-                depth--;
-                Frame currentFrame = enumerator.Current;
-                if (currentFrame == null)
+                while (ret == null && enumerator.MoveNext() && depth > 0)
                 {
-                    continue;
-                }
-                
-                IEnumerable<Instance> instances = currentFrame.FindLocalInstance(ident);
-                if (!instances.Any())
-                {
-                    instances = currentFrame.ContainingHeap.ObjectFrame.FindLocalInstance(ident);
-                }
+                    depth--;
+                    Frame currentFrame = enumerator.Current;
+                    if (currentFrame == null)
+                    {
+                        continue;
+                    }
 
-                if (instances.Any())
-                {
-                    ret = instances;
+                    IEnumerable<Instance> instances = currentFrame.FindLocalInstance(ident);
+                    if (!instances.Any())
+                    {
+                        instances = currentFrame.ContainingHeap.ObjectFrame.FindLocalInstance(ident);
+                    }
+
+                    if (instances.Any())
+                    {
+                        ret = instances;
+                    }
                 }
             }
-            
-            enumerator.Dispose();
 
             if (ret == null)
             {
