@@ -88,6 +88,10 @@ namespace Cascade.Common.Simulation
                 IsParam = false;
                 Type = type;
             }
+//            else if (Symbol is IMethodSymbol meth)
+//            {
+//
+//            }
             else
             {
                 throw new Exception("Invalid symbol type for identity");
