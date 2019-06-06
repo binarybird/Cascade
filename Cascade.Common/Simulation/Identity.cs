@@ -19,10 +19,12 @@ namespace Cascade.Common.Simulation
         }
 
         public String Identifier { get; set; }
+        public string ExtractedIdentifier { get; private set; }
         public bool IsLocal { get; private set; }
         public bool IsProperty { get; private set; }
         public bool IsField { get; private set; }
         public bool IsParam { get; private set; }
+        public bool IsFunctional { get; private set; }
         public Frame Frame { get; private set; }
         public ITypeSymbol Type { get; private set; }
 
@@ -38,7 +40,7 @@ namespace Cascade.Common.Simulation
             Update();
         }
             
-        public Identity(Frame frame, ISymbol symbol = null, String identifier = null)
+        public Identity(Frame frame, ISymbol symbol, String identifier = null)
         {
             Frame = frame;
             _symbol = symbol;
@@ -54,7 +56,9 @@ namespace Cascade.Common.Simulation
                 IsProperty = false;
                 IsField = false;
                 IsParam = false;
+                IsFunctional = false;
                 Type = local.Type;
+                ExtractedIdentifier = local.Name;
             }
             else if (_symbol is IFieldSymbol field)
             {
@@ -62,7 +66,9 @@ namespace Cascade.Common.Simulation
                 IsProperty = false;
                 IsField = true;
                 IsParam = false;
+                IsFunctional = false;
                 Type = field.Type;
+                ExtractedIdentifier = field.Name;
             }
             else if (_symbol is IPropertySymbol prop)
             {
@@ -70,7 +76,9 @@ namespace Cascade.Common.Simulation
                 IsProperty = true;
                 IsField = false;
                 IsParam = false;
+                IsFunctional = false;
                 Type = prop.Type;
+                ExtractedIdentifier = prop.Name;
             }
             else if (_symbol is IParameterSymbol param)
             {
@@ -78,7 +86,9 @@ namespace Cascade.Common.Simulation
                 IsProperty = false;
                 IsField = false;
                 IsParam = true;
+                IsFunctional = false;
                 Type = param.Type;
+                ExtractedIdentifier = param.Name;
             }
             else if (_symbol is ITypeSymbol type)
             {
@@ -86,12 +96,20 @@ namespace Cascade.Common.Simulation
                 IsProperty = false;
                 IsField = false;
                 IsParam = false;
+                IsFunctional = false;
                 Type = type;
+                ExtractedIdentifier = type.Name;
             }
-//            else if (Symbol is IMethodSymbol meth)
-//            {
-//
-//            }
+            else if (Symbol is IMethodSymbol meth)
+            {
+                IsLocal = false;
+                IsProperty = false;
+                IsField = false;
+                IsParam = false;
+                IsFunctional = true;
+                Type = meth.ReceiverType;
+                ExtractedIdentifier = meth.Name;
+            }
             else
             {
                 throw new Exception("Invalid symbol type for identity");
@@ -100,7 +118,7 @@ namespace Cascade.Common.Simulation
 
         public override string ToString()
         {
-            return $"Identity[Type=\"{Type.ToDisplayString(RoslynExtensions.TYPE_FMT)}\", Identifier=\"{Identifier}\"]";
+            return $"Identity[Type=\"{Type.ToDisplayString(RoslynExtensions.TYPE_FMT)}\", Identifier=\"{Identifier}\", ExtractedIdentifier=\"{ExtractedIdentifier}\"]";
         }
     }
 }

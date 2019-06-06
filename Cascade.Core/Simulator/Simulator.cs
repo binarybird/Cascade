@@ -18,27 +18,38 @@ namespace Cascade.Core.Simulator.Visitors
 
         private readonly Stack<Frame> _callStack = new Stack<Frame>();
         private readonly MultiDictionary<SyntaxReference, CodeGraph> _graphs = new MultiDictionary<SyntaxReference, CodeGraph>();
+
         private readonly Compilation _comp;
         private readonly SyntaxNode _entryPoint;
-        private readonly Heap _rootHeap;
+
+        public Heap RootHeap { get; }
+        public Frame EntryFrame { get; }
 
         public Simulator(Compilation comp, SyntaxNode entryPoint)
         {
             this._comp = comp;
             this._entryPoint = entryPoint;
-            this._rootHeap = new Heap(null);   
-        }
 
-        public void Analyze()
-        {
-            Frame entry = _rootHeap.CreateFrame(_entryPoint.GetReference(), _comp);
-            SimulateFrame(entry);
+            RootHeap = new Heap(null);
+            EntryFrame = RootHeap.CreateFrame(_entryPoint.GetReference(), _comp);
         }
 
         public void SimulateFrame(Frame frame)
         {
-            InitializeInstance(frame.ContainingHeap.OwningInstance);
-            
+            if (frame == null)
+            {
+                throw new ArgumentNullException(nameof(frame));
+            }
+
+            if (frame.Symbol.IsStatic)
+            {
+                InitializeStaticMembers(frame.ContainingHeap, frame.Symbol.ContainingType);//containing type or symbol.recievertype?
+            }
+            else
+            {
+                InitializeInstance(frame.ContainingHeap.OwningInstance);
+            }
+
             _callStack.Push(frame);
 
             foreach (SyntaxReference reference in frame.Symbol.DeclaringSyntaxReferences)
@@ -49,6 +60,20 @@ namespace Cascade.Core.Simulator.Visitors
             _callStack.Pop();
         }
 
+        public void InitializeStaticMembers(Heap heap, ITypeSymbol type)
+        {
+            foreach (ISymbol member in type.GetMembers())
+            {
+                if (!member.IsStatic || member is IMethodSymbol)
+                {
+                    continue;
+                }
+
+                Identity ident = new Identity(RootHeap.ObjectFrame, member);
+                heap.ObjectFrame.CreateInstance(ident);
+            }
+        }
+
         public void InitializeInstance(Instance instance)
         {
             if (instance == null)
@@ -56,52 +81,26 @@ namespace Cascade.Core.Simulator.Visitors
                 return;
             }
 
-            foreach (SyntaxReference reference in instance.DeclaredType.DeclaringSyntaxReferences)
+            if (instance.HasBeenInitialized)
             {
-                //TODO - initialize inherited
-                
-                ClassDeclarationSyntax syntaxNode = reference.GetSyntax() as ClassDeclarationSyntax;
-                if (syntaxNode == null)
+                Log.Warn("Instance {0} has already been initialized, skipping...", instance);
+                return;
+            }
+
+            foreach (ISymbol member in instance.DeclaredType.GetMembers())
+            {
+                if (member is IMethodSymbol)
                 {
-                    Log.Info("Cannot initialize instance {0}", instance);
                     continue;
                 }
 
-                foreach (MemberDeclarationSyntax member in syntaxNode.Members)
-                {
-                    InitializeMember(member, instance.InstanceHeap.ObjectFrame);
-                }
+                Identity ident = new Identity(instance.InstanceHeap.ObjectFrame, member);
+                instance.InstanceHeap.ObjectFrame.CreateInstance(ident);
             }
+
+            instance.HasBeenInitialized = true;
         }
 
-        private void InitializeMember(MemberDeclarationSyntax member, ObjectFrame objFrame)
-        {
-            if (member is FieldDeclarationSyntax field)
-            {
-                foreach (VariableDeclaratorSyntax variable in field.Declaration.Variables)
-                {
-                    IFieldSymbol symb = variable.GetDeclaringSymbol(_comp) as IFieldSymbol;
-                    if (symb == null)
-                    {
-                        Log.Error("Cannot resolve field");
-                        continue;
-                    }
-
-                    Instance instance = objFrame.CreateInstance(symb, symb.Type, variable.Identifier.ValueText);
-                    int y = 0;
-                }
-            } else if (member is PropertyDeclarationSyntax prop)
-            {
-                
-                IPropertySymbol t = prop.GetDeclaringSymbol(_comp) as IPropertySymbol;
-                int y = 0;
-            }
-            else
-            {
-                Log.Warn("Not initializing {0}", member);
-            }
-        }
-        
         public IEnumerable<Instance> FindInstance(Identity ident, int depth = -1)
         {
             if (ident == null)

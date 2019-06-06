@@ -32,11 +32,22 @@ namespace Cascade.Common.Simulation
         public Frame DeclaringFrame { get; }
         public ITypeSymbol DeclaredType { get; }
 
-        internal Instance(Frame declaringFrame, ITypeSymbol declaringType)
+        public bool HasBeenInitialized { get; set; }
+
+        public Instance(Frame declaringFrame, ITypeSymbol declaringType)
         {
             DeclaringFrame = declaringFrame ?? throw new ArgumentNullException(nameof(declaringFrame));
             DeclaredType = declaringType ?? throw new ArgumentNullException(nameof(declaringType));
             InstanceHeap = new Heap(this);
+            HasBeenInitialized = false;
+        }
+
+        public Instance(Heap instanceHeap, Frame declaringFrame, ITypeSymbol declaringType)
+        {
+            DeclaringFrame = declaringFrame ?? throw new ArgumentNullException(nameof(declaringFrame));
+            DeclaredType = declaringType ?? throw new ArgumentNullException(nameof(declaringType));
+            InstanceHeap = instanceHeap ?? throw new ArgumentNullException(nameof(declaringType));
+            HasBeenInitialized = false;
         }
 
         public override string ToString()

@@ -78,7 +78,7 @@ namespace Cascade.Core.Simulator.Visitors
                 }
                 else
                 {
-                    instance = frame.CreateInstance(ident, (symb as IParameterSymbol).Type);
+                    instance = frame.CreateInstance(ident);
                 }
             }
             else

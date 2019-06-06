@@ -30,14 +30,23 @@ namespace Cascade.Common.Simulation
             return instance;
         }
 
-        public Instance CreateInstance(Identity identity, ITypeSymbol instanceType)
+        public Instance CreateInstance(Identity identity)
         {
-            Instance instance = new Instance(this, instanceType);
+            Instance instance = new Instance(this, identity.Type);
             instance.Identities.Push(identity);
             Instances.Add(instance);
 
             return instance;
         }
+
+//        public Instance CreateInstance(Identity identity, ITypeSymbol instanceType)
+//        {
+//            Instance instance = new Instance(this, instanceType);
+//            instance.Identities.Push(identity);
+//            Instances.Add(instance);
+//
+//            return instance;
+//        }
 
         public Instance CreateInstance(ISymbol instanceDecl, ITypeSymbol instanceType, string identifier = null)
         {

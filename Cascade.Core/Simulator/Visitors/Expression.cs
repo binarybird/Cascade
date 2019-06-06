@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Cascade.Common.Extensions;
 using Cascade.Common.Simulation;
 using Microsoft.CodeAnalysis;
@@ -190,6 +192,46 @@ namespace Cascade.Core.Simulator.Visitors
 
             node.ArgumentList?.Accept<Evaluation>(this);
             node.Expression?.Accept<Evaluation>(this);
+
+            ISymbol symb = node.GetDeclaringSymbol(_comp);
+            if (symb == null)
+            {
+                symb = node.GetSymbolInfo(_comp).Symbol;
+            }
+
+            IMethodSymbol declaringSymbol = symb as IMethodSymbol;
+            if (declaringSymbol == null)
+            {
+                throw new Exception("Unhandled symbol type");
+            }
+
+            if (declaringSymbol.DeclaringSyntaxReferences.Length != 1)
+            {
+                throw new Exception("Unhandled declaring references length");
+            }
+
+            SyntaxReference methReference = declaringSymbol.DeclaringSyntaxReferences.FirstOrDefault();
+
+            Frame newFrame = null;
+            if (declaringSymbol.IsStatic)
+            {
+                Heap tmpHeap = new Heap(null);
+                newFrame = tmpHeap.CreateFrame(methReference, _comp);
+            }
+            else
+            {
+                IEnumerable<Instance> findInstance = FindInstance(node.GetReference());
+                if (findInstance.Count() != 1)
+                {
+                    throw new Exception("Unhandled instance length");
+                }
+
+                //TODO ensure instance has been init, mark it as such
+                Instance instance = findInstance.FirstOrDefault();
+                newFrame = instance.InstanceHeap.CreateFrame(methReference, _comp);
+            }
+
+            SimulateFrame(newFrame);
 
             return base.VisitInvocationExpression(node);
         }
