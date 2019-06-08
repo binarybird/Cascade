@@ -189,8 +189,8 @@ namespace Cascade.Core.Simulator.Visitors
 
         public override Evaluation VisitInvocationExpression(InvocationExpressionSyntax node)
         {
-            node.ArgumentList?.Accept<Evaluation>(this);
-            node.Expression?.Accept<Evaluation>(this);
+            EvaluationList args = node.ArgumentList?.Accept<Evaluation>(this) as EvaluationList;
+            Evaluation methodExpression = node.Expression?.Accept<Evaluation>(this);
 
             IMethodSymbol declaringSymbol = node.GetSymbol(_comp) as IMethodSymbol;
             if (declaringSymbol == null)
@@ -222,6 +222,17 @@ namespace Cascade.Core.Simulator.Visitors
                 //TODO ensure instance has been init, mark it as such
                 Instance instance = findInstance.FirstOrDefault();
                 newFrame = instance.InstanceHeap.CreateFrame(methReference, _comp);
+            }
+
+            foreach (Evaluation arg in args)
+            {
+                if (!(arg is Instance instance))
+                {
+                    Log.Warn("Unexpected argument!");
+                    continue;
+                }
+
+                newFrame.Instances.Add(instance);
             }
 
             SimulateFrame(newFrame);
@@ -268,7 +279,7 @@ namespace Cascade.Core.Simulator.Visitors
             FunctionalFrame functionalFrame = instance.InstanceHeap.CreateFrame(node.GetReference(), _comp);
             foreach (ArgumentSyntax arg in node.ArgumentList.Arguments)
             {
-                var findInstance = FindInstance(arg.GetReference()); //TODO - push
+                var findInstance = FindInstance(arg.GetReference()); //TODO - push to new frame
             }
             
             SimulateFrame(functionalFrame);

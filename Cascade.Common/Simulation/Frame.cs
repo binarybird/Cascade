@@ -139,5 +139,15 @@ namespace Cascade.Common.Simulation
                 return false;
             });
         }
+
+        public override bool Equals(object obj)
+        {
+            if(!(obj is Frame other))
+            {
+                return false;
+            }
+
+            return Symbol?.OriginalDefinition.Equals(other.Symbol?.OriginalDefinition) ?? false;
+        }
     }
 }

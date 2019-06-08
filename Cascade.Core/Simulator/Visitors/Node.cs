@@ -5,6 +5,7 @@ using Cascade.Common.Extensions;
 using Cascade.Common.Simulation;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using NLog;
 
 namespace Cascade.Core.Simulator.Visitors
 {
@@ -19,7 +20,7 @@ namespace Cascade.Core.Simulator.Visitors
         {
             return base.Visit(node);
         }
-        
+
         public override Evaluation VisitCompilationUnit(CompilationUnitSyntax node)
         {
             foreach (AttributeListSyntax listSyntax in node.AttributeLists)
@@ -54,40 +55,46 @@ namespace Cascade.Core.Simulator.Visitors
             node.NameColon?.Accept<Evaluation>(this);
             node.Expression?.Accept<Evaluation>(this);
 
-            return base.VisitArgument(node);
+            int count = found.Count();
+            if (count > 1)
+            {
+                Log.Warn("More then one instance found for argument: {0}", node.ToString());
+            }
+            else if (count == 0)
+            {
+                Log.Error("Argument instance not found for node {0}", node.ToString());
+            }
+
+            return found.FirstOrDefault();
         }
-        
+
         public override Evaluation VisitParameter(ParameterSyntax node)
         {
             Frame frame = _callStack.Peek();
-            Instance instance = null;
             
-            ISymbol symb = node.GetDeclaringSymbol(_comp);
+
+            IParameterSymbol symb = node.GetSymbol(_comp) as IParameterSymbol;
             if (symb == null)
             {
-                symb = node.GetSymbolInfo(_comp).Symbol;
+                throw new Exception("Unable to resolve parameter");
             }
-            if (symb as IParameterSymbol != null)
+
+            Identity ident = new Identity(frame, symb as IParameterSymbol, node.Identifier.ValueText);
+            ICollection<Instance> findInstance = frame.FindLocalInstance(ident).ToList();
+            Instance instance = null;
+            if (findInstance.Any())
             {
-                Identity ident = new Identity(frame, symb as IParameterSymbol, node.Identifier.ValueText);
-                ICollection<Instance> findInstance = frame.FindLocalInstance(ident).ToList();
-                if (findInstance.Any())
-                {
-                    instance = findInstance.First();//TODO - only one out of enum??
-                    instance.Identities.Push(ident);
-                }
-                else
-                {
-                    instance = frame.CreateInstance(ident);
-                }
+                instance = findInstance.First(); //TODO - only one out of enum??
+                instance.Identities.Push(ident);
             }
             else
             {
-                throw new Exception("Unable to resolve param");
+                instance = frame.CreateInstance(ident);
             }
-            
+
+
             //do stuff with instance
-            
+
             foreach (AttributeListSyntax listSyntax in node.AttributeLists)
             {
                 listSyntax.Accept<Evaluation>(this);
@@ -96,7 +103,7 @@ namespace Cascade.Core.Simulator.Visitors
             node.Default?.Accept<Evaluation>(this);
             node.Type?.Accept<Evaluation>(this);
 
-            return base.VisitParameter(node);
+            return instance;
         }
 
         public override Evaluation VisitArrayRankSpecifier(ArrayRankSpecifierSyntax node)
@@ -137,7 +144,7 @@ namespace Cascade.Core.Simulator.Visitors
             {
                 statement.Accept<Evaluation>(this);
             }
-            
+
             return base.VisitBlock(node);
         }
 

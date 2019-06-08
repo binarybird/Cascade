@@ -7,104 +7,114 @@ namespace Cascade.Core.Simulator.Visitors
     {
         public override Evaluation VisitAccessorList(AccessorListSyntax node)
         {
+            EvaluationList list = new EvaluationList();
             foreach (AccessorDeclarationSyntax accessor in node.Accessors)
             {
-                accessor.Accept<Evaluation>(this);
+                list.Add(accessor.Accept<Evaluation>(this));
             }
 
-            return base.VisitAccessorList(node);
+            return list;
         }
 
         public override Evaluation VisitArgumentList(ArgumentListSyntax node)
         {
+            EvaluationList list = new EvaluationList();
             foreach (ArgumentSyntax argument in node.Arguments)
             {
-                argument.Accept<Evaluation>(this);
+                list.Add(argument.Accept<Evaluation>(this));
             }
 
-            return base.VisitArgumentList(node);
+            return list;
         }
 
         public override Evaluation VisitAttributeArgumentList(AttributeArgumentListSyntax node)
         {
+            EvaluationList list = new EvaluationList();
             foreach (AttributeArgumentSyntax argument in node.Arguments)
             {
-                argument.Accept<Evaluation>(this);
+                list.Add(argument.Accept<Evaluation>(this));
             }
 
-            return base.VisitAttributeArgumentList(node);
+            return list;
         }
 
         public override Evaluation VisitAttributeList(AttributeListSyntax node)
         {
+            EvaluationList list = new EvaluationList();
             foreach (AttributeSyntax attribute in node.Attributes)
             {
-                attribute.Accept<Evaluation>(this);
+                list.Add(attribute.Accept<Evaluation>(this));
             }
 
             node.Target?.Accept<Evaluation>(this);
 
-            return base.VisitAttributeList(node);
+            return list;
         }
 
         public override Evaluation VisitBaseList(BaseListSyntax node)
         {
+            EvaluationList list = new EvaluationList();
             foreach (BaseTypeSyntax type in node.Types)
             {
-                type.Accept<Evaluation>(this);
+                list.Add(type.Accept<Evaluation>(this));
             }
-            
-            return base.VisitBaseList(node);
+
+            return list;
         }
 
         public override Evaluation VisitBracketedArgumentList(BracketedArgumentListSyntax node)
         {
+            EvaluationList list = new EvaluationList();
             foreach (ArgumentSyntax argument in node.Arguments)
             {
-                argument.Accept<Evaluation>(this);
+                list.Add(argument.Accept<Evaluation>(this));
             }
-            
-            return base.VisitBracketedArgumentList(node);
+
+            return list;
         }
 
         public override Evaluation VisitBracketedParameterList(BracketedParameterListSyntax node)
         {
+            EvaluationList list = new EvaluationList();
             foreach (ParameterSyntax parameter in node.Parameters)
             {
-                parameter.Accept<Evaluation>(this);
+                list.Add(parameter.Accept<Evaluation>(this));
             }
-            
-            return base.VisitBracketedParameterList(node);
+
+            return list;
         }
 
         public override Evaluation VisitParameterList(ParameterListSyntax node)
         {
+            EvaluationList list = new EvaluationList();
             foreach (ParameterSyntax parameter in node.Parameters)
             {
-                parameter.Accept<Evaluation>(this);
+                list.Add(parameter.Accept<Evaluation>(this));
             }
 
-            return base.VisitParameterList(node);
+            return list;
         }
 
         public override Evaluation VisitTypeArgumentList(TypeArgumentListSyntax node)
         {
+            EvaluationList list = new EvaluationList();
             foreach (TypeSyntax argument in node.Arguments)
             {
-                argument.Accept<Evaluation>(this);
+                list.Add(argument.Accept<Evaluation>(this));
             }
 
-            return base.VisitTypeArgumentList(node);
+            return list;
         }
 
         public override Evaluation VisitTypeParameterList(TypeParameterListSyntax node)
         {
+            EvaluationList list = new EvaluationList();
             foreach (TypeParameterSyntax parameter in node.Parameters)
             {
-                parameter.Accept<Evaluation>(this);
+                list.Add(parameter.Accept<Evaluation>(this));
             }
 
-            return base.VisitTypeParameterList(node);
+            return list;
         }
     }
 }

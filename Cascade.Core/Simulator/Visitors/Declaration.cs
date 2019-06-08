@@ -264,6 +264,7 @@ namespace Cascade.Core.Simulator.Visitors
 
         public override Evaluation VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
+            //todo assert node == frame
             foreach (AttributeListSyntax attributeList in node.AttributeLists)
             {
                 attributeList.Accept<Evaluation>(this);
@@ -275,11 +276,15 @@ namespace Cascade.Core.Simulator.Visitors
             }
 
             node.ExplicitInterfaceSpecifier?.Accept<Evaluation>(this);
-            node.ParameterList?.Accept<Evaluation>(this);
-            node.ReturnType?.Accept<Evaluation>(this);
-            node.TypeParameterList?.Accept<Evaluation>(this);
-            node.Body?.Accept<Evaluation>(this);
-            node.ExpressionBody?.Accept<Evaluation>(this);
+
+            //TODO - look for instances corresponding to args
+            //TODO - push/pop identity from args here
+
+            Evaluation evaluation = node.ParameterList?.Accept<Evaluation>(this);
+            Evaluation evaluation1 = node.ReturnType?.Accept<Evaluation>(this);
+            Evaluation evaluation2 = node.TypeParameterList?.Accept<Evaluation>(this);
+            Evaluation evaluation3 = node.Body?.Accept<Evaluation>(this);
+            Evaluation evaluation4 = node.ExpressionBody?.Accept<Evaluation>(this);
 
             return base.VisitMethodDeclaration(node);
         }
