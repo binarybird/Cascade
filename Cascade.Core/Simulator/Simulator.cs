@@ -41,7 +41,7 @@ namespace Cascade.Core.Simulator.Visitors
                 throw new ArgumentNullException(nameof(frame));
             }
 
-            if (frame.Symbol.IsStatic)
+            if (frame.Symbol?.IsStatic ?? false)
             {
                 InitializeStaticMembers(frame.ContainingHeap, frame.Symbol.ContainingType);//containing type or symbol.recievertype?
             }
