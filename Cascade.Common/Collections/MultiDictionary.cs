@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Transactions;
 
 namespace Cascade.Common.Collections
 {
@@ -8,7 +9,7 @@ namespace Cascade.Common.Collections
     {
         public new ICollection<TValue> this[TKey key]
         {
-            get => Get(key);
+            get => base[key];
             set => Add(key, value);
         }
 
@@ -41,7 +42,7 @@ namespace Cascade.Common.Collections
 
             if (!this.ContainsKey(key))
             {
-                this.Add(key, vals);
+                base.Add(key, vals);
             }
 
             foreach (TValue v in vals)
@@ -78,7 +79,7 @@ namespace Cascade.Common.Collections
                 return null;
             }
 
-            return this[key];
+            return base[key];
         }
     }
 }

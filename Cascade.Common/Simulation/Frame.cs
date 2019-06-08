@@ -18,7 +18,13 @@ namespace Cascade.Common.Simulation
 
         internal Frame(ISymbol symbol, Heap containingHeap)
         {
-            Symbol = symbol;
+            Symbol = symbol ?? throw new ArgumentNullException(nameof(symbol));
+            Instances = new List<Instance>();
+            ContainingHeap = containingHeap;
+        }
+
+        protected internal Frame(Heap containingHeap)
+        {
             Instances = new List<Instance>();
             ContainingHeap = containingHeap;
         }
@@ -38,15 +44,6 @@ namespace Cascade.Common.Simulation
 
             return instance;
         }
-
-//        public Instance CreateInstance(Identity identity, ITypeSymbol instanceType)
-//        {
-//            Instance instance = new Instance(this, instanceType);
-//            instance.Identities.Push(identity);
-//            Instances.Add(instance);
-//
-//            return instance;
-//        }
 
         public Instance CreateInstance(ISymbol instanceDecl, ITypeSymbol instanceType, string identifier = null)
         {
@@ -71,12 +68,12 @@ namespace Cascade.Common.Simulation
         {
             return Instances.Where(s =>
             {
-                if (s.Identities.Any(q => q.Symbol.Equals(ident.Symbol)))
+                if (s.Identities.Any(q => q.Symbol.Equals(ident.Symbol)))//TODO Identity.Equals()??
                 {
                     return true;
                 }
 
-                if (s.Identities.Any(q => q.Identifier.Equals(ident.Identifier)))
+                if (s.Identities.Any(q => q.Identifier.Equals(ident.Identifier)))//TODO Identity.Equals()??
                 {
                     return true;
                 }
@@ -134,7 +131,7 @@ namespace Cascade.Common.Simulation
         {
             return Instances.Where(s =>
             {
-                if (s.Identities.Any(q => q.Identifier.Equals(identifier)))
+                if (s.Identities.Any(q => q.EqualsIdentifier(identifier)))//TODO Identity.Equals()??
                 {
                     return true;
                 }

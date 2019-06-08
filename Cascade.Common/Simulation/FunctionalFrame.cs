@@ -20,7 +20,24 @@ namespace Cascade.Common.Simulation
             Kind = methSymb.MethodKind;
             ReturnType = methSymb.ReturnType;
         }
-        
+        public FunctionalFrame(string signature, string returnType, string recieverType, Heap containingHeap) : base(containingHeap)
+        {
+            throw new Exception("Not yet implemented");
+            //todo sigs
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is FunctionalFrame other)
+            {
+                throw new Exception("Not yet implemented");
+                //todo object sig
+                return Symbol.OriginalDefinition.Equals(other.Symbol.OriginalDefinition);
+            }
+
+            return false;
+        }
+
         public override string ToString()
         {
             return $"Frame[Reciever=\"{Symbol.ToDisplayString(RoslynExtensions.TYPE_FMT)}\" Kind=\"{Kind}\"]";

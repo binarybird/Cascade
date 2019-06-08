@@ -30,7 +30,7 @@ namespace Cascade.Core.Simulator.Visitors
             this._comp = comp;
             this._entryPoint = entryPoint;
 
-            RootHeap = new Heap(null);
+            RootHeap = new Heap("root");
             EntryFrame = RootHeap.CreateFrame(_entryPoint.GetReference(), _comp);
         }
 

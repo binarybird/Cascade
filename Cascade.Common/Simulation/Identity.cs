@@ -18,34 +18,47 @@ namespace Cascade.Common.Simulation
             }
         }
 
-        public String Identifier { get; set; }
-        public string ExtractedIdentifier { get; private set; }
+        public string Identifier { get; private set; }
+        public string ManualIdentifier { get; set; }
         public bool IsLocal { get; private set; }
         public bool IsProperty { get; private set; }
         public bool IsField { get; private set; }
         public bool IsParam { get; private set; }
         public bool IsFunctional { get; private set; }
-        public Frame Frame { get; private set; }
+        public Frame Frame { get; }
         public ITypeSymbol Type { get; private set; }
 
-        public Identity(Frame frame, SyntaxReference reference, Compilation compilation, String identifier = null)
+        public Identity(Frame frame, SyntaxReference reference, Compilation compilation, string manualIdentifier = null) : this(frame, reference.GetSymbol(compilation), manualIdentifier)
         {
-            Frame = frame;
-            _symbol = reference.GetDeclaringSymbol(compilation);
-            if (_symbol == null)
-            {
-                _symbol = reference.GetSymbolInfo(compilation).Symbol;
-            }
-            Identifier = identifier;
-            Update();
         }
             
-        public Identity(Frame frame, ISymbol symbol, String identifier = null)
+        public Identity(Frame frame, ISymbol symbol, string manualIdentifier = null)
         {
             Frame = frame;
             _symbol = symbol;
-            Identifier = identifier;
+            ManualIdentifier = manualIdentifier;
             Update();
+        }
+
+        public bool EqualsIdentifier(string ident)
+        {
+            if (ident == null)
+            {
+                return false;
+            }
+
+            return ident.Equals(Identifier) || ident.Equals(ManualIdentifier);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Identity ident)
+            {
+                bool ret = EqualsIdentifier(ident.Identifier) || EqualsIdentifier(ident.ManualIdentifier);
+                return ret && Frame.Equals(ident.Frame);
+            }
+
+            return false;
         }
 
         private void Update()
@@ -58,7 +71,7 @@ namespace Cascade.Common.Simulation
                 IsParam = false;
                 IsFunctional = false;
                 Type = local.Type;
-                ExtractedIdentifier = local.Name;
+                Identifier = local.Name;
             }
             else if (_symbol is IFieldSymbol field)
             {
@@ -68,7 +81,7 @@ namespace Cascade.Common.Simulation
                 IsParam = false;
                 IsFunctional = false;
                 Type = field.Type;
-                ExtractedIdentifier = field.Name;
+                Identifier = field.Name;
             }
             else if (_symbol is IPropertySymbol prop)
             {
@@ -78,7 +91,7 @@ namespace Cascade.Common.Simulation
                 IsParam = false;
                 IsFunctional = false;
                 Type = prop.Type;
-                ExtractedIdentifier = prop.Name;
+                Identifier = prop.Name;
             }
             else if (_symbol is IParameterSymbol param)
             {
@@ -88,7 +101,7 @@ namespace Cascade.Common.Simulation
                 IsParam = true;
                 IsFunctional = false;
                 Type = param.Type;
-                ExtractedIdentifier = param.Name;
+                Identifier = param.Name;
             }
             else if (_symbol is ITypeSymbol type)
             {
@@ -98,7 +111,7 @@ namespace Cascade.Common.Simulation
                 IsParam = false;
                 IsFunctional = false;
                 Type = type;
-                ExtractedIdentifier = type.Name;
+                Identifier = type.Name;
             }
             else if (Symbol is IMethodSymbol meth)
             {
@@ -108,7 +121,7 @@ namespace Cascade.Common.Simulation
                 IsParam = false;
                 IsFunctional = true;
                 Type = meth.ReceiverType;
-                ExtractedIdentifier = meth.Name;
+                Identifier = meth.Name;
             }
             else
             {
@@ -118,7 +131,7 @@ namespace Cascade.Common.Simulation
 
         public override string ToString()
         {
-            return $"Identity[Type=\"{Type.ToDisplayString(RoslynExtensions.TYPE_FMT)}\", Identifier=\"{Identifier}\", ExtractedIdentifier=\"{ExtractedIdentifier}\"]";
+            return $"Identity[Type=\"{Type.ToDisplayString(RoslynExtensions.TYPE_FMT)}\", Identifier=\"{Identifier}\", ManualIdentifier=\"{ManualIdentifier}\"]";
         }
     }
 }

@@ -189,17 +189,10 @@ namespace Cascade.Core.Simulator.Visitors
 
         public override Evaluation VisitInvocationExpression(InvocationExpressionSyntax node)
         {
-
             node.ArgumentList?.Accept<Evaluation>(this);
             node.Expression?.Accept<Evaluation>(this);
 
-            ISymbol symb = node.GetDeclaringSymbol(_comp);
-            if (symb == null)
-            {
-                symb = node.GetSymbolInfo(_comp).Symbol;
-            }
-
-            IMethodSymbol declaringSymbol = symb as IMethodSymbol;
+            IMethodSymbol declaringSymbol = node.GetSymbol(_comp) as IMethodSymbol;
             if (declaringSymbol == null)
             {
                 throw new Exception("Unhandled symbol type");
@@ -215,7 +208,7 @@ namespace Cascade.Core.Simulator.Visitors
             Frame newFrame = null;
             if (declaringSymbol.IsStatic)
             {
-                Heap tmpHeap = new Heap(null);
+                Heap tmpHeap = new Heap("static");//TODO - static heaps?
                 newFrame = tmpHeap.CreateFrame(methReference, _comp);
             }
             else

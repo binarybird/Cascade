@@ -17,26 +17,24 @@ namespace Cascade.Common.Simulation
         public Instance OwningInstance { get; }
         public IList<FunctionalFrame> FunctionalFrames;
         public ObjectFrame ObjectFrame { get; }
-        
+
+        public Heap(string objectName)
+        {
+            ObjectFrame = new ObjectFrame(objectName, this);
+        }
+
         public Heap(Instance owningInstance)
         {
-            OwningInstance = owningInstance;
-            if (owningInstance == null)
+            OwningInstance = owningInstance ?? throw new ArgumentNullException(nameof(owningInstance));
+
+            if (owningInstance.Identities.Count != 0)
             {
-                //root "instance"
-                ObjectFrame = new ObjectFrame(this);
+                ObjectFrame = new ObjectFrame(owningInstance.Identities.Peek()?.Type, this);
             }
             else
             {
-                if (owningInstance.Identities.Count != 0)
-                {
-                    ObjectFrame = new ObjectFrame(owningInstance.Identities.Peek()?.Type, this);
-                }
-                else
-                {
-                    //root "instance"
-                    ObjectFrame = new ObjectFrame(this);
-                }
+                //root "instance"
+                ObjectFrame = new ObjectFrame("Object",this);
             }
         }
 
@@ -47,23 +45,24 @@ namespace Cascade.Common.Simulation
             {
                 symbol = reference.GetSymbolInfo(compilation).Symbol;
             }
-            
+
             if (FunctionalFrames == null)
             {
                 FunctionalFrames = new List<FunctionalFrame>();
             }
             else
             {
-                IEnumerable<FunctionalFrame> functionalFrames = FunctionalFrames.Where(w => w.Symbol.Equals(symbol)).ToList();
+                IEnumerable<FunctionalFrame> functionalFrames =
+                    FunctionalFrames.Where(w => w.Symbol.Equals(symbol)).ToList();
                 if (functionalFrames.Any())
                 {
                     return functionalFrames.First();
                 }
             }
-            
+
             FunctionalFrame ff = new FunctionalFrame(symbol, this);
             FunctionalFrames.Add(ff);
-        
+
             return ff;
         }
 
@@ -74,6 +73,7 @@ namespace Cascade.Common.Simulation
             {
                 ret.AddRange(frame.FindLocalInstance(ident));
             }
+
             ret.AddRange(ObjectFrame.FindLocalInstance(ident));
 
             return ret;
@@ -86,6 +86,7 @@ namespace Cascade.Common.Simulation
             {
                 ret.AddRange(frame.FindLocalInstance(reference, compilation));
             }
+
             ret.AddRange(ObjectFrame.FindLocalInstance(reference, compilation));
 
             return ret;

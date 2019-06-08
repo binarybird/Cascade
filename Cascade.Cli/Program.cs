@@ -28,13 +28,17 @@ namespace Cascade
             "{\n" +
             "static string y = \"something\";\n" +
             "public string z = \"somethingElse\";\n" +
+            "public Program(string[] newargs)\n" +
+            "{\n"+
+            ""+
+            "}\n"+
             "static void Main(string[] args)\n" +
             "{\n" +
-            "Test();\n" +
+            "Test(args);\n" +
             "}\n" +
-            "static void Test()\n" +
+            "static void Test(string[] something)\n" +
             "{\n" +
-            "Program p = new Program();\n" +
+            "Program p = new Program(something);\n" +
             "string x = p.z;\n" +
             "}\n" +
             "}\n" +

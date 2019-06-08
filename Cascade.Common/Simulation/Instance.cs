@@ -31,7 +31,6 @@ namespace Cascade.Common.Simulation
         public Heap InstanceHeap { get; }
         public Frame DeclaringFrame { get; }
         public ITypeSymbol DeclaredType { get; }
-
         public bool HasBeenInitialized { get; set; }
 
         public Instance(Frame declaringFrame, ITypeSymbol declaringType)

@@ -47,6 +47,22 @@ namespace Cascade.Common.Extensions
             return compilation.GetSemanticModel(node.SyntaxTree).GetSymbolInfo(node);
         }
 
+        public static ISymbol GetSymbol(this SyntaxReference reference, Compilation compilation)
+        {
+            return reference.GetSyntax().GetSymbol(compilation);
+        }
+
+        public static ISymbol GetSymbol(this SyntaxNode node, Compilation compilation)
+        {
+            ISymbol symb = node.GetDeclaringSymbol(compilation);
+            if (symb == null)
+            {
+                symb = node.GetSymbolInfo(compilation).Symbol;
+            }
+
+            return symb;
+        }
+
         public static bool IsEqual(this SyntaxReference reference, SyntaxReference other)
         {
             if (other == null)
