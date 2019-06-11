@@ -343,17 +343,17 @@ namespace Cascade.Core.Simulator.Visitors
             node.ArgumentList?.Accept<Evaluation>(this);
             
             Evaluation eval = node.Initializer?.Accept<Evaluation>(this);
+
             Frame frame = _callStack.Peek();
             if (eval is Instance inst)
             {
                 ISymbol s = node.GetReference().GetDeclaringSymbol(_comp);
-                inst.Identities.Push(new Identity(frame, s, node.Identifier.ValueText));
+                inst.Identities.Push(new Identity(s, frame, node.Identifier.ValueText));
             }
             else
             {
                 ISymbol declaringSymbol = ((VariableDeclarationSyntax) node.Parent).Type.GetReference().GetDeclaringSymbol(_comp);
-                int y = 0;
-//                eval = frame.CreateInstance(node.GetReference(), _comp, node.Identifier.ValueText);
+              //  eval = frame.CreateInstance(node.GetReference(), _comp, node.Identifier.ValueText);
             }
 
             return eval;

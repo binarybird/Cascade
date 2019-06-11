@@ -71,7 +71,6 @@ namespace Cascade.Core.Simulator.Visitors
         public override Evaluation VisitParameter(ParameterSyntax node)
         {
             Frame frame = _callStack.Peek();
-            
 
             IParameterSymbol symb = node.GetSymbol(_comp) as IParameterSymbol;
             if (symb == null)
@@ -79,21 +78,18 @@ namespace Cascade.Core.Simulator.Visitors
                 throw new Exception("Unable to resolve parameter");
             }
 
-            Identity ident = new Identity(frame, symb as IParameterSymbol, node.Identifier.ValueText);
+            Identity ident = new Identity(symb, frame, node.Identifier.ValueText);
             ICollection<Instance> findInstance = frame.FindLocalInstance(ident).ToList();
             Instance instance = null;
             if (findInstance.Any())
             {
                 instance = findInstance.First(); //TODO - only one out of enum??
-                instance.Identities.Push(ident);
             }
             else
             {
                 instance = frame.CreateInstance(ident);
+                Log.Error("Unable to find argument instance! Creating new instance {0}", instance.ToString());
             }
-
-
-            //do stuff with instance
 
             foreach (AttributeListSyntax listSyntax in node.AttributeLists)
             {

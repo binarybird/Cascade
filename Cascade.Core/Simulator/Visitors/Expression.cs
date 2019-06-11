@@ -208,34 +208,24 @@ namespace Cascade.Core.Simulator.Visitors
             Frame newFrame = null;
             if (declaringSymbol.IsStatic)
             {
+                //static method calls have no "instance"
                 Heap tmpHeap = new Heap("static");//TODO - static heaps?
                 newFrame = tmpHeap.CreateFrame(methReference, _comp);
             }
             else
             {
+                //method call on an instance
                 IEnumerable<Instance> findInstance = FindInstance(node.GetReference());
                 if (findInstance.Count() != 1)
                 {
                     throw new Exception("Unhandled instance length");
                 }
 
-                //TODO ensure instance has been init, mark it as such
                 Instance instance = findInstance.FirstOrDefault();
                 newFrame = instance.InstanceHeap.CreateFrame(methReference, _comp);
             }
 
-            foreach (Evaluation arg in args)
-            {
-                if (!(arg is Instance instance))
-                {
-                    Log.Warn("Unexpected argument!");
-                    continue;
-                }
-
-                newFrame.Instances.Add(instance);
-            }
-
-            SimulateFrame(newFrame);
+            SimulateFrame(newFrame, EvaluationUtil.From<Instance>(args).ToArray());
 
             return base.VisitInvocationExpression(node);
         }
@@ -271,18 +261,20 @@ namespace Cascade.Core.Simulator.Visitors
         {
             //node.ArgumentList?.Accept(this);
             Evaluation evaluation = node.Initializer?.Accept<Evaluation>(this); //TODO - choose ret
+            EvaluationList accept = node.ArgumentList.Accept(this) as EvaluationList;
+
+
             node.Type?.Accept<Evaluation>(this);
-            
-            ITypeSymbol type = node.Type.GetSymbolInfo(_comp).Symbol as ITypeSymbol;
+
+            ITypeSymbol type = node.Type.GetSymbol(_comp) as ITypeSymbol;
             
             Instance instance = _callStack.Peek().CreateInstance(type);
-            FunctionalFrame functionalFrame = instance.InstanceHeap.CreateFrame(node.GetReference(), _comp);
-            foreach (ArgumentSyntax arg in node.ArgumentList.Arguments)
-            {
-                var findInstance = FindInstance(arg.GetReference()); //TODO - push to new frame
-            }
+            InitializeInstance(instance);
+
+            FunctionalFrame constructor = instance.InstanceHeap.CreateFrame(node.GetReference(), _comp);
             
-            SimulateFrame(functionalFrame);
+            
+            SimulateFrame(constructor, EvaluationUtil.From<Instance>(accept).ToArray());
 
             return instance;
         }

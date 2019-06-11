@@ -40,10 +40,10 @@ namespace Cascade.Common.Simulation
 
         public FunctionalFrame CreateFrame(SyntaxReference reference, Compilation compilation)
         {
-            ISymbol symbol = reference.GetDeclaringSymbol(compilation);
-            if (symbol == null)
+            ISymbol symbol = reference.GetSymbol(compilation);
+            if (!(symbol is IMethodSymbol meth))
             {
-                symbol = reference.GetSymbolInfo(compilation).Symbol;
+                throw new ArgumentNullException(nameof(symbol),"Unhandled symbol for FunctionalFrame");
             }
 
             if (FunctionalFrames == null)
@@ -60,7 +60,13 @@ namespace Cascade.Common.Simulation
                 }
             }
 
-            FunctionalFrame ff = new FunctionalFrame(symbol, this);
+            Identity[] argIdents = meth.Parameters.Select(s =>
+            {
+                SyntaxReference paramRef = s.DeclaringSyntaxReferences.FirstOrDefault();
+                return new Identity(paramRef, compilation, manualIdentifier: s.Name);
+            }).ToArray();
+
+            FunctionalFrame ff = new FunctionalFrame(symbol, this, argIdents);
             FunctionalFrames.Add(ff);
 
             return ff;
@@ -94,7 +100,7 @@ namespace Cascade.Common.Simulation
 
         public override string ToString()
         {
-            return $"Heap[]";
+            return $"Heap[OwningInstance={OwningInstance}, FunctionalFrameCount={FunctionalFrames.Count}]";
         }
     }
 }

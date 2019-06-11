@@ -33,9 +33,17 @@ namespace Cascade.Common.Simulation
         public ITypeSymbol DeclaredType { get; }
         public bool HasBeenInitialized { get; set; }
 
+        public Instance(ITypeSymbol declaringType)
+        {
+            DeclaredType = declaringType ?? throw new ArgumentNullException(nameof(declaringType));
+            InstanceHeap = new Heap(this);
+            DeclaringFrame = null;
+            HasBeenInitialized = false;
+        }
+
         public Instance(Frame declaringFrame, ITypeSymbol declaringType)
         {
-            DeclaringFrame = declaringFrame ?? throw new ArgumentNullException(nameof(declaringFrame));
+            DeclaringFrame = declaringFrame;
             DeclaredType = declaringType ?? throw new ArgumentNullException(nameof(declaringType));
             InstanceHeap = new Heap(this);
             HasBeenInitialized = false;
@@ -43,7 +51,7 @@ namespace Cascade.Common.Simulation
 
         public Instance(Heap instanceHeap, Frame declaringFrame, ITypeSymbol declaringType)
         {
-            DeclaringFrame = declaringFrame ?? throw new ArgumentNullException(nameof(declaringFrame));
+            DeclaringFrame = declaringFrame;
             DeclaredType = declaringType ?? throw new ArgumentNullException(nameof(declaringType));
             InstanceHeap = instanceHeap ?? throw new ArgumentNullException(nameof(declaringType));
             HasBeenInitialized = false;

@@ -48,7 +48,7 @@ namespace Cascade.Common.Simulation
         public Instance CreateInstance(ISymbol instanceDecl, ITypeSymbol instanceType, string identifier = null)
         {
             Instance instance = new Instance(this, instanceType);
-            instance.Identities.Push(new Identity(this, instanceDecl, identifier));
+            instance.Identities.Push(new Identity(instanceDecl, this, identifier));
             Instances.Add(instance);
 
             return instance;
@@ -58,7 +58,7 @@ namespace Cascade.Common.Simulation
             string identifier = null)
         {
             Instance instance = new Instance(this, instanceType);
-            instance.Identities.Push(new Identity(this, reference, compilation, identifier));
+            instance.Identities.Push(new Identity(reference, compilation, this, identifier));
             Instances.Add(instance);
 
             return instance;
@@ -66,6 +66,11 @@ namespace Cascade.Common.Simulation
 
         public IEnumerable<Instance> FindLocalInstance(Identity ident)
         {
+            if (ident == null)
+            {
+                return ImmutableArray<Instance>.Empty;
+            }
+
             return Instances.Where(s =>
             {
                 if (s.Identities.Any(q => q.Symbol.Equals(ident.Symbol)))//TODO Identity.Equals()??
@@ -73,7 +78,7 @@ namespace Cascade.Common.Simulation
                     return true;
                 }
 
-                if (s.Identities.Any(q => q.Identifier.Equals(ident.Identifier)))//TODO Identity.Equals()??
+                if (s.Identities.Any(q => q.EqualsIdentifier(ident.Identifier) || ident.EqualsIdentifier(q.Identifier)))//TODO Identity.Equals()??
                 {
                     return true;
                 }
@@ -148,6 +153,11 @@ namespace Cascade.Common.Simulation
             }
 
             return Symbol?.OriginalDefinition.Equals(other.Symbol?.OriginalDefinition) ?? false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

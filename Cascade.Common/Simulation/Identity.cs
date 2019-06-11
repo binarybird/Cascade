@@ -25,14 +25,15 @@ namespace Cascade.Common.Simulation
         public bool IsField { get; private set; }
         public bool IsParam { get; private set; }
         public bool IsFunctional { get; private set; }
-        public Frame Frame { get; }
+        public bool IsDisposed { get; set; }
+        public Frame Frame { get; set;  }
         public ITypeSymbol Type { get; private set; }
 
-        public Identity(Frame frame, SyntaxReference reference, Compilation compilation, string manualIdentifier = null) : this(frame, reference.GetSymbol(compilation), manualIdentifier)
+        public Identity(SyntaxReference reference, Compilation compilation, Frame frame = null, string manualIdentifier = null) : this(reference.GetSymbol(compilation), frame, manualIdentifier)
         {
         }
             
-        public Identity(Frame frame, ISymbol symbol, string manualIdentifier = null)
+        public Identity(ISymbol symbol, Frame frame = null, string manualIdentifier = null)
         {
             Frame = frame;
             _symbol = symbol;
@@ -50,16 +51,6 @@ namespace Cascade.Common.Simulation
             return ident.Equals(Identifier) || ident.Equals(ManualIdentifier);
         }
 
-        public override bool Equals(object obj)
-        {
-            if (obj is Identity ident)
-            {
-                bool ret = EqualsIdentifier(ident.Identifier) || EqualsIdentifier(ident.ManualIdentifier);
-                return ret && Frame.Equals(ident.Frame);
-            }
-
-            return false;
-        }
 
         private void Update()
         {
@@ -127,6 +118,22 @@ namespace Cascade.Common.Simulation
             {
                 throw new Exception("Invalid symbol type for identity");
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Identity ident)
+            {
+                bool ret = EqualsIdentifier(ident.Identifier) || EqualsIdentifier(ident.ManualIdentifier);
+                return ret && Frame.Equals(ident.Frame);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         public override string ToString()

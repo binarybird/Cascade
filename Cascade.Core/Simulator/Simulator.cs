@@ -17,12 +17,14 @@ namespace Cascade.Core.Simulator.Visitors
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
         private readonly Stack<Frame> _callStack = new Stack<Frame>();
-        private readonly MultiDictionary<SyntaxReference, CodeGraph> _graphs = new MultiDictionary<SyntaxReference, CodeGraph>();
+
+        private readonly MultiDictionary<SyntaxReference, CodeGraph> _graphs =
+            new MultiDictionary<SyntaxReference, CodeGraph>();
 
         private readonly Compilation _comp;
         private readonly SyntaxNode _entryPoint;
 
-        public Heap RootHeap { get; }
+        public Instance RootInstance { get; }
         public Frame EntryFrame { get; }
 
         public Simulator(Compilation comp, SyntaxNode entryPoint)
@@ -30,24 +32,40 @@ namespace Cascade.Core.Simulator.Visitors
             this._comp = comp;
             this._entryPoint = entryPoint;
 
-            RootHeap = new Heap("root");
-            EntryFrame = RootHeap.CreateFrame(_entryPoint.GetReference(), _comp);
+            RootInstance = new Instance(new Heap("root"), null, entryPoint.GetSymbol(_comp).ContainingType);
+            EntryFrame = RootInstance.InstanceHeap.CreateFrame(_entryPoint.GetReference(), _comp);
+
+            InitializeInstance(RootInstance);
         }
 
-        public void SimulateFrame(Frame frame)
+        public void SimulateFrame(Frame frame, params Instance[] args)
         {
             if (frame == null)
             {
                 throw new ArgumentNullException(nameof(frame));
             }
 
-            if (frame.Symbol?.IsStatic ?? false)
+            Log.Info("Simulating {0}", frame.ToString());
+
+            FunctionalFrame functionalFrame = frame as FunctionalFrame;
+            if (functionalFrame != null)
             {
-                InitializeStaticMembers(frame.ContainingHeap, frame.Symbol.ContainingType);//containing type or symbol.recievertype?
-            }
-            else
-            {
-                InitializeInstance(frame.ContainingHeap.OwningInstance);
+                //TODO named args, parameterized args
+                if (args != null && args.Length != functionalFrame.DeclaredArguments.Length)
+                {
+                    throw new ArgumentException("Unhandled argument length");
+                }
+
+                for (int i = 0; i < functionalFrame.DeclaredArguments.Length; i++)
+                {
+                    Identity newArgIdent = functionalFrame.DeclaredArguments[i];
+                    Instance incommingInstance = args[i];
+
+                    newArgIdent.IsDisposed = false;
+                    incommingInstance.Identities.Push(newArgIdent);
+
+                    functionalFrame.Instances.Add(incommingInstance);
+                }
             }
 
             _callStack.Push(frame);
@@ -57,24 +75,45 @@ namespace Cascade.Core.Simulator.Visitors
                 Visit(reference.GetSyntax());
             }
 
+            if (functionalFrame != null)
+            {
+                foreach (Identity argument in functionalFrame.DeclaredArguments)
+                {
+                    argument.IsDisposed = true;
+                }
+            }
+
+
             _callStack.Pop();
         }
 
-        public void InitializeStaticMembers(Heap heap, ITypeSymbol type)
+        public void InitializeInstance(Instance instance)
         {
-            foreach (ISymbol member in type.GetMembers())
+            if (instance.DeclaredType?.IsStatic ?? false)
+            {
+                InitializeStaticMembers(instance);
+            }
+            else
+            {
+                InitializeInstanceMembers(instance);
+            }
+        }
+
+        protected void InitializeStaticMembers(Instance instance)
+        {
+            foreach (ISymbol member in instance.DeclaredType.GetMembers())
             {
                 if (!member.IsStatic || member is IMethodSymbol)
                 {
                     continue;
                 }
 
-                Identity ident = new Identity(RootHeap.ObjectFrame, member);
-                heap.ObjectFrame.CreateInstance(ident);
+                Identity ident = new Identity(member, instance.InstanceHeap.ObjectFrame);
+                instance.InstanceHeap.ObjectFrame.CreateInstance(ident);
             }
         }
 
-        public void InitializeInstance(Instance instance)
+        protected void InitializeInstanceMembers(Instance instance)
         {
             if (instance == null)
             {
@@ -94,7 +133,7 @@ namespace Cascade.Core.Simulator.Visitors
                     continue;
                 }
 
-                Identity ident = new Identity(instance.InstanceHeap.ObjectFrame, member);
+                Identity ident = new Identity(member, instance.InstanceHeap.ObjectFrame);
                 instance.InstanceHeap.ObjectFrame.CreateInstance(ident);
             }
 
@@ -106,8 +145,8 @@ namespace Cascade.Core.Simulator.Visitors
             if (ident == null)
             {
                 throw new ArgumentNullException(nameof(ident));
-            } 
-            
+            }
+
             if (depth < 0)
             {
                 depth = _callStack.Count;
@@ -142,7 +181,7 @@ namespace Cascade.Core.Simulator.Visitors
             {
                 ret = Enumerable.Empty<Instance>();
             }
-            
+
             return ret;
         }
 
@@ -151,13 +190,13 @@ namespace Cascade.Core.Simulator.Visitors
             if (node == null)
             {
                 throw new ArgumentNullException(nameof(node));
-            }   
-            
+            }
+
             if (depth < 0)
             {
                 depth = _callStack.Count;
             }
-            
+
             Stack<Frame>.Enumerator enumerator = _callStack.GetEnumerator();
 
             IEnumerable<Instance> ret = null;
@@ -169,7 +208,7 @@ namespace Cascade.Core.Simulator.Visitors
                 {
                     continue;
                 }
-                
+
                 IEnumerable<Instance> instances = currentFrame.FindLocalInstance(node, _comp);
                 if (!instances.Any())
                 {
@@ -181,7 +220,7 @@ namespace Cascade.Core.Simulator.Visitors
                     ret = instances;
                 }
             }
-            
+
             enumerator.Dispose();
 
             return ret;

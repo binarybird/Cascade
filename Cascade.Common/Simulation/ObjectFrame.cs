@@ -31,10 +31,14 @@ namespace Cascade.Common.Simulation
             {
                 throw new Exception("Not yet implemented");
                 //todo object sig
-                return Symbol.OriginalDefinition.Equals(other.Symbol.OriginalDefinition);
+                //return Symbol.OriginalDefinition.Equals(other.Symbol.OriginalDefinition);
             }
 
             return false;
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         public override string ToString()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Cascade.Common.Simulation;
 using Cascade.Core.Simulator;
 using Cascade.Core.Simulator.Visitors;
 using Cascade.Rule;
@@ -59,7 +60,10 @@ namespace Cascade
             foreach (MethodDeclarationSyntax entryPoint in finder.EntryPoints)
             {
                 Simulator sim = new Simulator(comp, entryPoint);
-                sim.SimulateFrame(sim.EntryFrame);
+
+                INamedTypeSymbol arr = comp.GetSpecialType(SpecialType.System_Array);//TODO - array as instance?
+
+                sim.SimulateFrame(sim.EntryFrame, new Instance(arr));
             }
         }
 
