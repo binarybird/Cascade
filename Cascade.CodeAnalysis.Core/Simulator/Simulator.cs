@@ -23,16 +23,17 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
         public Instance RootInstance { get; }
         public Frame EntryFrame { get; }
 
-        public Node RootNode { get; }
-
         public Simulator(Compilation comp, SyntaxNode entryPoint)
         {
             this._comp = comp;
             this._entryPoint = entryPoint;
 
-            RootNode = new Node(Node.Kind.Root);
             RootInstance = new Instance(new Heap("root"), null, entryPoint.GetSymbol(_comp).ContainingType);
             EntryFrame = RootInstance.InstanceHeap.CreateFrame(_entryPoint.GetReference(), _comp);
+
+            //TODO - init node in evaluation constructor
+            //TODO - need some kind of factory/builder
+            RootInstance.Node.AddEdge(Edge.Kind.CreatesObject, RootInstance.Node);
 
             InitializeInstance(RootInstance);
         }

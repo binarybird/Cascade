@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace Cascade.CodeAnalysis.Graph
@@ -8,23 +9,32 @@ namespace Cascade.CodeAnalysis.Graph
     {
         public enum Kind
         {
-            ElementAccess,
-            ElementAssignment,
-            MemberAccess,
-            MemberAssignment,
-            MemberInvocation,
-            LocalAccess,
-            LocalAssignment,
-            ObjectCreation,
+            AccessesElement,
+            AssignsElement,
+            AccessesMember,
+            AssignsMember,
+            InvokesMember,
+            AccessesLocal,
+            AssignsLocal,
+            CreatesObject,
             Inherits,
             Overrides,
             Implements,
             Declares,
+            InstanceOwns,
+            Initializes,
         }
+
+        public IReadOnlyCollection<Node> ToNodes { get; }
+        public Node FromNode { get; }
+
+        public Kind EdgeKind { get; }
 
         internal Edge(Kind kind, Node from, params Node[] to)
         {
-
+            ToNodes = new ReadOnlyCollection<Node>(to);
+            FromNode = from;
+            EdgeKind = kind;
         }
     }
 }

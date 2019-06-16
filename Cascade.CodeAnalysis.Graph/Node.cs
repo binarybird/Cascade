@@ -34,6 +34,11 @@ namespace Cascade.CodeAnalysis.Graph
 
         public Edge AddEdge(Edge.Kind kind, params Node[] to)
         {
+            if (to == null || to.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(to));
+            }
+
             Edge edge = new Edge(kind, this, to);
             _edges.Add(edge);
             return edge;
