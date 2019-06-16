@@ -19,8 +19,6 @@ namespace Cascade.CodeAnalysis.Cli
     {
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
-
-
         public static void Main(string[] args)
         {
             InitLogger();

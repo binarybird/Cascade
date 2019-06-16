@@ -6,10 +6,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Cascade.CodeAnalysis.UnitTests
 {
-    public class SimpleRunThrough
+    public class IntegrationTest : TestBase
     {
         private static readonly string SomeCode =
             "using System;\n" +
@@ -35,9 +36,9 @@ namespace Cascade.CodeAnalysis.UnitTests
             "}\n" +
             "}";
 
-        public SimpleRunThrough()
+        public IntegrationTest(ITestOutputHelper outputHelper) : base(outputHelper)
         {
-            TestUtil.InitLogger();
+
         }
 
         [Fact]
