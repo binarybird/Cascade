@@ -9,17 +9,22 @@ namespace Cascade.CodeAnalysis.Graph
         public enum Kind
         {
             ElementAccess,
-            ElementRead,
-            ElementWrite,
+            ElementAssignment,
             MemberAccess,
-            MemberRead,
-            MemberWrite,
+            MemberAssignment,
             MemberInvocation,
-            TypeCreation,
+            LocalAccess,
+            LocalAssignment,
+            ObjectCreation,
             Inherits,
             Overrides,
             Implements,
             Declares,
+        }
+
+        internal Edge(Kind kind, Node from, params Node[] to)
+        {
+
         }
     }
 }

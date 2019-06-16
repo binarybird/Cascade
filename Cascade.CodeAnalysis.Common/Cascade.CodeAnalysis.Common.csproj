@@ -16,4 +16,8 @@
     <Folder Include="Exception\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Cascade.CodeAnalysis.Graph\Cascade.CodeAnalysis.Graph.csproj" />
+  </ItemGroup>
+
 </Project>

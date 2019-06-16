@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cascade.CodeAnalysis.Graph;
 using Microsoft.CodeAnalysis;
 
 namespace Cascade.CodeAnalysis.Common.Simulation
@@ -29,6 +30,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
         public Frame DeclaringFrame { get; }
         public ITypeSymbol DeclaredType { get; }
         public bool HasBeenInitialized { get; set; }
+        public Node Node { get; set; }
 
         public Instance(ITypeSymbol declaringType)
         {

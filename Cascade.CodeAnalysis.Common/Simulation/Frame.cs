@@ -6,6 +6,7 @@ using Cascade.CodeAnalysis.Common.Collections;
 using Cascade.CodeAnalysis.Common.Extensions;
 using Cascade.CodeAnalysis.Common.Extract;
 using Cascade.CodeAnalysis.Common.Extract.Visitors;
+using Cascade.CodeAnalysis.Graph;
 using Microsoft.CodeAnalysis;
 
 namespace Cascade.CodeAnalysis.Common.Simulation
@@ -15,6 +16,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
         public ISymbol Symbol { get; }
         public ICollection<Instance> Instances { get; }
         public Heap ContainingHeap { get; }
+        public Node Node { get; set; }
 
         internal Frame(ISymbol symbol, Heap containingHeap)
         {

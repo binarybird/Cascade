@@ -1,5 +1,6 @@
 ﻿using System;
 using Cascade.CodeAnalysis.Common.Extensions;
+using Cascade.CodeAnalysis.Graph;
 using Microsoft.CodeAnalysis;
 
 namespace Cascade.CodeAnalysis.Common.Simulation
@@ -28,6 +29,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
         public bool IsDisposed { get; set; }
         public Frame Frame { get; set;  }
         public ITypeSymbol Type { get; private set; }
+        public Node Node { get; set; }
 
         public Identity(SyntaxReference reference, Compilation compilation, Frame frame = null, string manualIdentifier = null) : this(reference.GetSymbol(compilation), frame, manualIdentifier)
         {

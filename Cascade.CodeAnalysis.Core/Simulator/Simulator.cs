@@ -17,20 +17,20 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
 
         private readonly Stack<Frame> _callStack = new Stack<Frame>();
 
-        private readonly MultiDictionary<SyntaxReference, CodeGraph> _graphs =
-            new MultiDictionary<SyntaxReference, CodeGraph>();
-
         private readonly Compilation _comp;
         private readonly SyntaxNode _entryPoint;
 
         public Instance RootInstance { get; }
         public Frame EntryFrame { get; }
 
+        public Node RootNode { get; }
+
         public Simulator(Compilation comp, SyntaxNode entryPoint)
         {
             this._comp = comp;
             this._entryPoint = entryPoint;
 
+            RootNode = new Node(Node.Kind.Root);
             RootInstance = new Instance(new Heap("root"), null, entryPoint.GetSymbol(_comp).ContainingType);
             EntryFrame = RootInstance.InstanceHeap.CreateFrame(_entryPoint.GetReference(), _comp);
 

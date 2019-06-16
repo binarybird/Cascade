@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using Cascade.CodeAnalysis.Graph;
 using NLog;
 
 namespace Cascade.CodeAnalysis.Common.Simulation
 {
     public interface Evaluation
     {
-
+        Node Node { get; }
     }
 
     public static class EvaluationUtil
