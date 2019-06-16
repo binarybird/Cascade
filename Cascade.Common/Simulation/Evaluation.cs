@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using NLog;
 
-namespace Cascade.Common.Simulation
+namespace Cascade.CodeAnalysis.Common.Simulation
 {
     public interface Evaluation
     {

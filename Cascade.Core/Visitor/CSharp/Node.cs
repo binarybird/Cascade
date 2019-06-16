@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Cascade.Core.Visitor.CSharp
+namespace Cascade.CodeAnalysis.Core.Visitor.CSharp
 {
     public partial class CSharpVisitor : CSharpSyntaxVisitor, Visitor
     {

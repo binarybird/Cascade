@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Dynamic;
 using System.Linq;
-using Cascade.Common.Collections;
-using Cascade.Common.Extensions;
-using Cascade.Common.Extract.Visitors;
+using Cascade.CodeAnalysis.Common.Collections;
+using Cascade.CodeAnalysis.Common.Extensions;
+using Cascade.CodeAnalysis.Common.Extract;
+using Cascade.CodeAnalysis.Common.Extract.Visitors;
 using Microsoft.CodeAnalysis;
 
-namespace Cascade.Common.Simulation
+namespace Cascade.CodeAnalysis.Common.Simulation
 {
     public abstract class Frame : Evaluation
     {

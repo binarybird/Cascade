@@ -1,8 +1,8 @@
 ﻿using System;
-using Cascade.Common.Extensions;
+using Cascade.CodeAnalysis.Common.Extensions;
 using Microsoft.CodeAnalysis;
 
-namespace Cascade.Common.Simulation
+namespace Cascade.CodeAnalysis.Common.Simulation
 {
     public class Identity : Evaluation
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Cascade.Common.Extract.Visitors
+namespace Cascade.CodeAnalysis.Common.Extract.Visitors
 {
     partial class InfoExtractor
     {

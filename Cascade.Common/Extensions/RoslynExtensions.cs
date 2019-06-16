@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Text;
 using System.Threading;
 using Microsoft.CodeAnalysis;
 
-namespace Cascade.Common.Extensions
+namespace Cascade.CodeAnalysis.Common.Extensions
 {
     public static class RoslynExtensions
     {

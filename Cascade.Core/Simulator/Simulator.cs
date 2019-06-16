@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cascade.Common.Collections;
-using Cascade.Common.Extensions;
-using Cascade.Common.Simulation;
-using Cascade.Graph;
+using Cascade.CodeAnalysis.Common.Collections;
+using Cascade.CodeAnalysis.Common.Extensions;
+using Cascade.CodeAnalysis.Common.Simulation;
+using Cascade.CodeAnalysis.Graph;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NLog;
 
-namespace Cascade.Core.Simulator.Visitors
+namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
 {
     public partial class Simulator : CSharpSyntaxVisitor<Evaluation>
     {
@@ -82,7 +81,6 @@ namespace Cascade.Core.Simulator.Visitors
                     argument.IsDisposed = true;
                 }
             }
-
 
             _callStack.Pop();
         }
@@ -224,6 +222,11 @@ namespace Cascade.Core.Simulator.Visitors
             enumerator.Dispose();
 
             return ret;
+        }
+
+        public override string ToString()
+        {
+            return String.Join("\n", _callStack);
         }
     }
 }

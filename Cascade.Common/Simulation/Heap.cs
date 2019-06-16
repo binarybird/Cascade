@@ -1,16 +1,10 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Dynamic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cascade.Common.Extensions;
+using Cascade.CodeAnalysis.Common.Extensions;
 using Microsoft.CodeAnalysis;
-using static System.Reflection.MethodBase;
 
-namespace Cascade.Common.Simulation
+namespace Cascade.CodeAnalysis.Common.Simulation
 {
     public class Heap
     {

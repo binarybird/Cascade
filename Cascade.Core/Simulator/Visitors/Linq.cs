@@ -1,7 +1,7 @@
-﻿using Cascade.Common.Simulation;
+﻿using Cascade.CodeAnalysis.Common.Simulation;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Cascade.Core.Simulator.Visitors
+namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
 {
     partial class Simulator
     {

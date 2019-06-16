@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace Cascade.Common.Simulation
+namespace Cascade.CodeAnalysis.Common.Simulation
 {
     public class EvaluationList : List<Evaluation>, Evaluation
     {

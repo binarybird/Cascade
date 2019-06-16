@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Cascade.Graph
+﻿namespace Cascade.CodeAnalysis.Graph
 {
     public class CodeGraph
     {

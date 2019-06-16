@@ -1,9 +1,9 @@
 using System;
-using Cascade.Common.Collections;
+using Cascade.CodeAnalysis.Common.Collections;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace Cascade.Common.Extract.Visitors
+namespace Cascade.CodeAnalysis.Common.Extract.Visitors
 {
     public partial class InfoExtractor : CSharpSyntaxVisitor
     {

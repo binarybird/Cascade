@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Cascade.CodeAnalysis.Core</AssemblyName>
+    <RootNamespace>Cascade.CodeAnalysis.Core</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cascade.Common\Cascade.Common.csproj" />
-    <ProjectReference Include="..\Cascade.Graph\Cascade.Graph.csproj" />
+    <ProjectReference Include="..\Cascade.Common\Cascade.CodeAnalysis.Common.csproj" />
+    <ProjectReference Include="..\Cascade.Graph\Cascade.CodeAnalysis.Graph.csproj" />
   </ItemGroup>
 
 </Project>

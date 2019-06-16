@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Transactions;
 
-namespace Cascade.Common.Collections
+namespace Cascade.CodeAnalysis.Common.Collections
 {
     public class MultiDictionary<TKey, TValue> : Dictionary<TKey, ICollection<TValue>>
     {

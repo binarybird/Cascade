@@ -3,8 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <AssemblyName>Cascade.Cli</AssemblyName>
-    <RootNamespace>Cascade.Cli</RootNamespace>
+    <AssemblyName>Cascade.CodeAnalysis.Cli</AssemblyName>
+    <RootNamespace>Cascade.CodeAnalysis.Cli</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cascade.Core\Cascade.Core.csproj" />
-    <ProjectReference Include="..\Cascade.Rule\Cascade.Rule.csproj" />
+    <ProjectReference Include="..\Cascade.Core\Cascade.CodeAnalysis.Core.csproj" />
+    <ProjectReference Include="..\Cascade.Rule\Cascade.CodeAnalysis.Rule.csproj" />
   </ItemGroup>
 
 </Project>

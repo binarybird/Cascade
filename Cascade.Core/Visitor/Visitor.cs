@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 
-namespace Cascade.Core.Visitor
+namespace Cascade.CodeAnalysis.Core.Visitor.CSharp
 {
     public interface Visitor
     {
