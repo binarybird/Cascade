@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cascade.Core\Cascade.CodeAnalysis.Core.csproj" />
+    <ProjectReference Include="..\Cascade.CodeAnalysis.Core\Cascade.CodeAnalysis.Core.csproj" />
   </ItemGroup>
 
 </Project>

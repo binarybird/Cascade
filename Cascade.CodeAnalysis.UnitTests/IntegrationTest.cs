@@ -1,14 +1,14 @@
+using System.Collections.Generic;
 using Cascade.CodeAnalysis.Common.Roslyn;
 using Cascade.CodeAnalysis.Common.Simulation;
 using Cascade.CodeAnalysis.Core.Simulator.Visitors;
 using Cascade.Rule;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Cascade.CodeAnalysis.UnitTests
+namespace Cascade.CodeAnalysis.Tests
 {
     public class IntegrationTest : TestBase
     {

@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cascade.Common\Cascade.CodeAnalysis.Common.csproj" />
-    <ProjectReference Include="..\Cascade.Rule\Cascade.CodeAnalysis.Rule.csproj" />
+    <ProjectReference Include="..\Cascade.CodeAnalysis.Common\Cascade.CodeAnalysis.Common.csproj" />
+    <ProjectReference Include="..\Cascade.CodeAnalysis.Rule\Cascade.CodeAnalysis.Rule.csproj" />
   </ItemGroup>
 
   <ItemGroup>

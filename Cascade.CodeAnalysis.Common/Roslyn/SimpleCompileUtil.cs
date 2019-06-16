@@ -27,11 +27,11 @@ namespace Cascade.CodeAnalysis.Common.Roslyn
             return CSharpCompilation.Create("simplecomp", trees, references, options: options);
         }
 
-        public static MetadataReference[] GetMetadataReferencesFromSolution(FileInfo sln)
+        public static MetadataReference[] GetMetadataReferencesFromSolution(FileInfo solution)
         {
             List<MetadataReference> ret = new List<MetadataReference>();
 
-            AnalyzerManager manager = new AnalyzerManager(sln.FullName);
+            AnalyzerManager manager = new AnalyzerManager(solution.FullName);
             foreach (KeyValuePair<string, ProjectAnalyzer> proj in manager.Projects)
             {
                 ProjectAnalyzer analyzer = proj.Value;

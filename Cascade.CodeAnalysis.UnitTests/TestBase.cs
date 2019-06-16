@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
 using Xunit.Abstractions;
 
-namespace Cascade.CodeAnalysis.UnitTests
+namespace Cascade.CodeAnalysis.Tests
 {
     public class TestBase
     {

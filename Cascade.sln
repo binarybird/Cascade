@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cascade.CodeAnalysis.Cli", "Cascade.Cli\Cascade.CodeAnalysis.Cli.csproj", "{2CC086A5-53D5-48B7-9CF4-6177CC8BBDC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cascade.CodeAnalysis.Cli", "Cascade.CodeAnalysis.Cli\Cascade.CodeAnalysis.Cli.csproj", "{2CC086A5-53D5-48B7-9CF4-6177CC8BBDC8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cascade.CodeAnalysis.Common", "Cascade.Common\Cascade.CodeAnalysis.Common.csproj", "{D4D2B251-FD52-49A0-BB8E-40EEDC8A26F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cascade.CodeAnalysis.Common", "Cascade.CodeAnalysis.Common\Cascade.CodeAnalysis.Common.csproj", "{D4D2B251-FD52-49A0-BB8E-40EEDC8A26F0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cascade.CodeAnalysis.Core", "Cascade.Core\Cascade.CodeAnalysis.Core.csproj", "{CBCAFCE0-82A2-4150-B966-FB3C4693CC89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cascade.CodeAnalysis.Core", "Cascade.CodeAnalysis.Core\Cascade.CodeAnalysis.Core.csproj", "{CBCAFCE0-82A2-4150-B966-FB3C4693CC89}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cascade.CodeAnalysis.Graph", "Cascade.Graph\Cascade.CodeAnalysis.Graph.csproj", "{7FE402D2-CB1B-4F95-A6E2-D3B162888DBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cascade.CodeAnalysis.Graph", "Cascade.CodeAnalysis.Graph\Cascade.CodeAnalysis.Graph.csproj", "{7FE402D2-CB1B-4F95-A6E2-D3B162888DBB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cascade.CodeAnalysis.Rule", "Cascade.Rule\Cascade.CodeAnalysis.Rule.csproj", "{235EC321-FF57-4A53-9FB1-87F236F85B56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cascade.CodeAnalysis.Rule", "Cascade.CodeAnalysis.Rule\Cascade.CodeAnalysis.Rule.csproj", "{235EC321-FF57-4A53-9FB1-87F236F85B56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cascade.CodeAnalysis.UnitTests", "Cascade.CodeAnalysis.UnitTests\Cascade.CodeAnalysis.UnitTests.csproj", "{4B7F56CF-BE97-4AD5-A98B-F53313331F4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cascade.CodeAnalysis.Tests", "Cascade.CodeAnalysis.UnitTests\Cascade.CodeAnalysis.Tests.csproj", "{4B7F56CF-BE97-4AD5-A98B-F53313331F4B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

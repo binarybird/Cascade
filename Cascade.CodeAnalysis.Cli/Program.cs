@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Cascade.CodeAnalysis.Common.Roslyn;
-using Cascade.CodeAnalysis.Common.Simulation;
-using Cascade.CodeAnalysis.Core.Simulator.Visitors;
-using Cascade.Rule;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;

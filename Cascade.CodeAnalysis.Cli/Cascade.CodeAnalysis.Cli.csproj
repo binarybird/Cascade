@@ -12,9 +12,4 @@
     <PackageReference Include="NLog" Version="4.6.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Cascade.Core\Cascade.CodeAnalysis.Core.csproj" />
-    <ProjectReference Include="..\Cascade.Rule\Cascade.CodeAnalysis.Rule.csproj" />
-  </ItemGroup>
-
 </Project>
