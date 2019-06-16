@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cascade.CodeAnalysis.Graph"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cascade.CodeAnalysis.Rule", "Cascade.CodeAnalysis.Rule\Cascade.CodeAnalysis.Rule.csproj", "{235EC321-FF57-4A53-9FB1-87F236F85B56}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cascade.CodeAnalysis.Tests", "Cascade.CodeAnalysis.UnitTests\Cascade.CodeAnalysis.Tests.csproj", "{4B7F56CF-BE97-4AD5-A98B-F53313331F4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cascade.CodeAnalysis.Tests", "Cascade.CodeAnalysis.Tests\Cascade.CodeAnalysis.Tests.csproj", "{4B7F56CF-BE97-4AD5-A98B-F53313331F4B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
