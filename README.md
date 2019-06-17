@@ -4,3 +4,5 @@
 
 
 Cascade is a dataflow analysis framework built on top of [Roslyn](https://github.com/dotnet/roslyn). Cascade will simulate how data flows through source code and will graph the result.
+
+The end goal is to eventually perform vulnerability analysis on the resulting dataflow graph.
