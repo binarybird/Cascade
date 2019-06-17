@@ -28,12 +28,10 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
             this._comp = comp;
             this._entryPoint = entryPoint;
 
-            RootInstance = new Instance(new Heap("root"), null, entryPoint.GetSymbol(_comp).ContainingType);
-            EntryFrame = RootInstance.InstanceHeap.CreateFrame(_entryPoint.GetReference(), _comp);
+            RootInstance = new Instance(new Heap("root"), null, entryPoint.GetSymbol(_comp).ContainingType, Node<Evaluation>.Kind.Root);
+            EntryFrame = RootInstance.InstanceHeap.CreateFrame(_entryPoint.GetReference(), _comp, Node<Evaluation>.Kind.Root);
 
-            //TODO - init node in evaluation constructor
-            //TODO - need some kind of factory/builder
-            RootInstance.Node.AddEdge(Edge.Kind.CreatesObject, RootInstance.Node);
+            GraphBuilder<Evaluation>.From(RootInstance.Node).Kind(Edge<Evaluation>.Kind.CreatesObject).To(RootInstance.Node);
 
             InitializeInstance(RootInstance);
         }
@@ -107,8 +105,8 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
                     continue;
                 }
 
-                Identity ident = new Identity(member, instance.InstanceHeap.ObjectFrame);
-                instance.InstanceHeap.ObjectFrame.CreateInstance(ident);
+                Identity ident = new Identity(member, member.NodeKind(), instance.InstanceHeap.ObjectFrame);
+                instance.InstanceHeap.ObjectFrame.CreateInstance(ident, member.NodeKind());
             }
         }
 
@@ -132,8 +130,8 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
                     continue;
                 }
 
-                Identity ident = new Identity(member, instance.InstanceHeap.ObjectFrame);
-                instance.InstanceHeap.ObjectFrame.CreateInstance(ident);
+                Identity ident = new Identity(member, member.NodeKind(), instance.InstanceHeap.ObjectFrame);
+                instance.InstanceHeap.ObjectFrame.CreateInstance(ident, member.NodeKind());
             }
 
             instance.HasBeenInitialized = true;

@@ -30,30 +30,33 @@ namespace Cascade.CodeAnalysis.Common.Simulation
         public Frame DeclaringFrame { get; }
         public ITypeSymbol DeclaredType { get; }
         public bool HasBeenInitialized { get; set; }
-        public Node Node { get; set; }
+        public Node<Evaluation> Node { get; }
 
-        public Instance(ITypeSymbol declaringType)
+        public Instance(ITypeSymbol declaringType, Node<Evaluation>.Kind kind)
         {
             DeclaredType = declaringType ?? throw new ArgumentNullException(nameof(declaringType));
             InstanceHeap = new Heap(this);
             DeclaringFrame = null;
             HasBeenInitialized = false;
+            Node = new Node<Evaluation>(kind, this);
         }
 
-        public Instance(Frame declaringFrame, ITypeSymbol declaringType)
+        public Instance(Frame declaringFrame, ITypeSymbol declaringType, Node<Evaluation>.Kind kind)
         {
             DeclaringFrame = declaringFrame;
             DeclaredType = declaringType ?? throw new ArgumentNullException(nameof(declaringType));
             InstanceHeap = new Heap(this);
             HasBeenInitialized = false;
+            Node = new Node<Evaluation>(kind, this);
         }
 
-        public Instance(Heap instanceHeap, Frame declaringFrame, ITypeSymbol declaringType)
+        public Instance(Heap instanceHeap, Frame declaringFrame, ITypeSymbol declaringType, Node<Evaluation>.Kind kind)
         {
             DeclaringFrame = declaringFrame;
             DeclaredType = declaringType ?? throw new ArgumentNullException(nameof(declaringType));
             InstanceHeap = instanceHeap ?? throw new ArgumentNullException(nameof(declaringType));
             HasBeenInitialized = false;
+            Node = new Node<Evaluation>(kind, this);
         }
 
         public override string ToString()

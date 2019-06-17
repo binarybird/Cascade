@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Cascade.CodeAnalysis.Graph
 {
-    public class Edge
+    public class Edge<T>
     {
         public enum Kind
         {
@@ -25,14 +25,14 @@ namespace Cascade.CodeAnalysis.Graph
             Initializes,
         }
 
-        public IReadOnlyCollection<Node> ToNodes { get; }
-        public Node FromNode { get; }
+        public IReadOnlyCollection<Node<T>> ToNodes { get; }
+        public Node<T> FromNode { get; }
 
         public Kind EdgeKind { get; }
 
-        internal Edge(Kind kind, Node from, params Node[] to)
+        internal Edge(Kind kind, Node<T> from, params Node<T>[] to)
         {
-            ToNodes = new ReadOnlyCollection<Node>(to);
+            ToNodes = new ReadOnlyCollection<Node<T>>(to);
             FromNode = from;
             EdgeKind = kind;
         }

@@ -210,7 +210,7 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
             {
                 //static method calls have no "instance"
                 Heap tmpHeap = new Heap("static");//TODO - static heaps?
-                newFrame = tmpHeap.CreateFrame(methReference, _comp);
+                newFrame = tmpHeap.CreateFrame(methReference, _comp, declaringSymbol.NodeKind());
             }
             else
             {
@@ -222,7 +222,7 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
                 }
 
                 Instance instance = findInstance.FirstOrDefault();
-                newFrame = instance.InstanceHeap.CreateFrame(methReference, _comp);
+                newFrame = instance.InstanceHeap.CreateFrame(methReference, _comp, declaringSymbol.NodeKind());
             }
 
             SimulateFrame(newFrame, EvaluationUtil.From<Instance>(args).ToArray());
@@ -268,12 +268,11 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
 
             ITypeSymbol type = node.Type.GetSymbol(_comp) as ITypeSymbol;
             
-            Instance instance = _callStack.Peek().CreateInstance(type);
+            Instance instance = _callStack.Peek().CreateInstance(type, type.NodeKind());
             InitializeInstance(instance);
 
-            FunctionalFrame constructor = instance.InstanceHeap.CreateFrame(node.GetReference(), _comp);
-            
-            
+            FunctionalFrame constructor = instance.InstanceHeap.CreateFrame(node.GetReference(), _comp, type.NodeKind());
+
             SimulateFrame(constructor, EvaluationUtil.From<Instance>(accept).ToArray());
 
             return instance;

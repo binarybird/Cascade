@@ -1,5 +1,6 @@
 using System;
 using Cascade.CodeAnalysis.Common.Extensions;
+using Cascade.CodeAnalysis.Graph;
 using Microsoft.CodeAnalysis;
 
 namespace Cascade.CodeAnalysis.Common.Simulation
@@ -7,8 +8,9 @@ namespace Cascade.CodeAnalysis.Common.Simulation
     public class ObjectFrame : Frame
     {
         public string ObjectSignature { get; }
+        public override Node<Evaluation> Node { get; }
 
-        public ObjectFrame(ISymbol symbol, Heap containingHeap) : base(symbol, containingHeap)
+        public ObjectFrame(ISymbol symbol, Heap containingHeap, Node<Evaluation>.Kind kind) : base(symbol, containingHeap)
         {
             ITypeSymbol typeSymbol = symbol as ITypeSymbol;
             if (typeSymbol == null)
@@ -17,11 +19,13 @@ namespace Cascade.CodeAnalysis.Common.Simulation
             }
 
             ObjectSignature = typeSymbol.Name;//TODO - qualified sig
+            Node = new Node<Evaluation>(kind, this);
         }
 
-        public ObjectFrame(string objectSignature, Heap containingHeap) : base(containingHeap)
+        public ObjectFrame(string objectSignature, Heap containingHeap, Node<Evaluation>.Kind kind) : base(containingHeap)
         {
             ObjectSignature = objectSignature;
+            Node = new Node<Evaluation>(kind, this);
         }
 
         public override bool Equals(object obj)

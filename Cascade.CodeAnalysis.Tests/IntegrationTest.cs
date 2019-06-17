@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Cascade.CodeAnalysis.Common.Roslyn;
 using Cascade.CodeAnalysis.Common.Simulation;
 using Cascade.CodeAnalysis.Core.Simulator.Visitors;
+using Cascade.CodeAnalysis.Graph;
 using Cascade.Rule;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -54,14 +55,19 @@ namespace Cascade.CodeAnalysis.Tests
                 finder.Visit(tree.GetRoot());
             }
 
+            List<Node<Evaluation>> simGraphs = new List<Node<Evaluation>>();
             foreach (MethodDeclarationSyntax entryPoint in finder.EntryPoints)
             {
                 Simulator sim = new Simulator(comp, entryPoint);
 
                 INamedTypeSymbol arr = comp.GetSpecialType(SpecialType.System_Array);//TODO - array as instance?
 
-                sim.SimulateFrame(sim.EntryFrame, new Instance(arr));
+                sim.SimulateFrame(sim.EntryFrame, new Instance(arr, Node<Evaluation>.Kind.Root));
+
+                simGraphs.Add(sim.RootInstance.Node);
             }
+
+            int y = 0;
         }
     }
 }

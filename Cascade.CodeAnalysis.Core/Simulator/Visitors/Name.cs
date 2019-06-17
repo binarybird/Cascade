@@ -1,5 +1,6 @@
 ﻿using Cascade.CodeAnalysis.Common.Extensions;
 using Cascade.CodeAnalysis.Common.Simulation;
+using Cascade.CodeAnalysis.Graph;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -25,7 +26,7 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
         public override Evaluation VisitIdentifierName(IdentifierNameSyntax node)
         {
             ISymbol info = node.GetSymbolInfo(_comp).Symbol;
-            return new Identity(info, _callStack.Peek(), node.Identifier.ValueText);
+            return new Identity(info, info?.NodeKind() ?? Node<Evaluation>.Kind.LocalVariable, _callStack.Peek(), node.Identifier.ValueText);
         }
 
         public override Evaluation VisitNameColon(NameColonSyntax node)

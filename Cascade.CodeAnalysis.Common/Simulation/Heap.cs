@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cascade.CodeAnalysis.Common.Extensions;
+using Cascade.CodeAnalysis.Graph;
 using Microsoft.CodeAnalysis;
 
 namespace Cascade.CodeAnalysis.Common.Simulation
@@ -14,7 +15,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
 
         public Heap(string objectName)
         {
-            ObjectFrame = new ObjectFrame(objectName, this);
+            ObjectFrame = new ObjectFrame(objectName, this, Node<Evaluation>.Kind.Class);
         }
 
         public Heap(Instance owningInstance)
@@ -23,21 +24,21 @@ namespace Cascade.CodeAnalysis.Common.Simulation
 
             if (owningInstance.Identities.Count != 0)
             {
-                ObjectFrame = new ObjectFrame(owningInstance.Identities.Peek()?.Type, this);
+                ObjectFrame = new ObjectFrame(owningInstance.Identities.Peek()?.Type, this, Node<Evaluation>.Kind.Class);
             }
             else
             {
                 //root "instance"
-                ObjectFrame = new ObjectFrame("Object",this);
+                ObjectFrame = new ObjectFrame("Object", this, Node<Evaluation>.Kind.Class);
             }
         }
 
-        public FunctionalFrame CreateFrame(SyntaxReference reference, Compilation compilation)
+        public FunctionalFrame CreateFrame(SyntaxReference reference, Compilation compilation, Node<Evaluation>.Kind kind)
         {
             ISymbol symbol = reference.GetSymbol(compilation);
             if (!(symbol is IMethodSymbol meth))
             {
-                throw new ArgumentNullException(nameof(symbol),"Unhandled symbol for FunctionalFrame");
+                throw new ArgumentNullException(nameof(symbol), "Unhandled symbol for FunctionalFrame");
             }
 
             if (FunctionalFrames == null)
@@ -57,10 +58,10 @@ namespace Cascade.CodeAnalysis.Common.Simulation
             Identity[] argIdents = meth.Parameters.Select(s =>
             {
                 SyntaxReference paramRef = s.DeclaringSyntaxReferences.FirstOrDefault();
-                return new Identity(paramRef, compilation, manualIdentifier: s.Name);
+                return new Identity(paramRef, compilation, kind, manualIdentifier: s.Name);
             }).ToArray();
 
-            FunctionalFrame ff = new FunctionalFrame(symbol, this, argIdents);
+            FunctionalFrame ff = new FunctionalFrame(symbol, this, kind, argIdents);
             FunctionalFrames.Add(ff);
 
             return ff;

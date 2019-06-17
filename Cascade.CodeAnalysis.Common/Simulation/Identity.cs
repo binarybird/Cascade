@@ -29,13 +29,13 @@ namespace Cascade.CodeAnalysis.Common.Simulation
         public bool IsDisposed { get; set; }
         public Frame Frame { get; set;  }
         public ITypeSymbol Type { get; private set; }
-        public Node Node { get; set; }
+        public Node<Evaluation> Node { get; }
 
-        public Identity(SyntaxReference reference, Compilation compilation, Frame frame = null, string manualIdentifier = null) : this(reference.GetSymbol(compilation), frame, manualIdentifier)
+        public Identity(SyntaxReference reference, Compilation compilation, Node<Evaluation>.Kind kind, Frame frame = null, string manualIdentifier = null) : this(reference.GetSymbol(compilation), kind, frame, manualIdentifier)
         {
         }
             
-        public Identity(ISymbol symbol, Frame frame = null, string manualIdentifier = null)
+        public Identity(ISymbol symbol, Node<Evaluation>.Kind kind, Frame frame = null, string manualIdentifier = null)
         {
             Frame = frame;
             _symbol = symbol;

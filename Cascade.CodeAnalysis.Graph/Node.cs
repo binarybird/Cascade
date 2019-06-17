@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Cascade.CodeAnalysis.Graph
 {
-    public class Node
+    public class Node<T>
     {
         public enum Kind
         {
@@ -18,28 +18,30 @@ namespace Cascade.CodeAnalysis.Graph
             Property,
             Field,
             LocalVariable,
+            Enum,
+            Collection,
         }
 
         public Kind NodeKind { get; }
-        public Object NodeInfo { get; }
+        public T NodeInfo { get; }
 
-        public IReadOnlyCollection<Edge> Edges => new ReadOnlyCollection<Edge>(_edges);
-        private readonly List<Edge> _edges = new List<Edge>();
+        public IReadOnlyList<Edge<T>> Edges => _edges.AsReadOnly();
+        private readonly List<Edge<T>> _edges = new List<Edge<T>>();
 
-        public Node(Kind kind, Object nodeInfo = null)
+        public Node(Kind kind, T nodeInfo = default(T))
         {
             NodeKind = kind;
             NodeInfo = nodeInfo;
         }
 
-        public Edge AddEdge(Edge.Kind kind, params Node[] to)
+        internal Edge<T> AddEdge(Edge<T>.Kind kind, params Node<T>[] to)
         {
             if (to == null || to.Length == 0)
             {
                 throw new ArgumentNullException(nameof(to));
             }
 
-            Edge edge = new Edge(kind, this, to);
+            Edge<T> edge = new Edge<T>(kind, this, to);
             _edges.Add(edge);
             return edge;
         }

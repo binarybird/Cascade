@@ -1,5 +1,6 @@
 using System;
 using Cascade.CodeAnalysis.Common.Extensions;
+using Cascade.CodeAnalysis.Graph;
 using Microsoft.CodeAnalysis;
 
 namespace Cascade.CodeAnalysis.Common.Simulation
@@ -9,8 +10,9 @@ namespace Cascade.CodeAnalysis.Common.Simulation
         public MethodKind Kind { get; }
         public ITypeSymbol ReturnType { get; }
         public Identity[] DeclaredArguments { get; }
+        public override Node<Evaluation> Node { get; }
 
-        public FunctionalFrame(ISymbol symbol, Heap containingHeap, params Identity[] args) : base(symbol, containingHeap)
+        public FunctionalFrame(ISymbol symbol, Heap containingHeap, Node<Evaluation>.Kind kind, params Identity[] args) : base(symbol, containingHeap)
         {
             IMethodSymbol methSymb = symbol as IMethodSymbol;
             if (methSymb == null)
@@ -18,6 +20,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
                 throw new Exception("Functional frame must have a MethodSymbol");
             }
 
+            Node = new Node<Evaluation>(kind, this);
             Kind = methSymb.MethodKind;
             ReturnType = methSymb.ReturnType;
             DeclaredArguments = args;
@@ -31,7 +34,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
                 argument.Frame = this;
             }
         }
-        public FunctionalFrame(string signature, string returnType, string recieverType, Heap containingHeap, params Identity[] args) : base(containingHeap)
+        public FunctionalFrame(string signature, string returnType, string recieverType, Heap containingHeap, Node<Evaluation>.Kind kind, params Identity[] args) : base(containingHeap)
         {
             throw new Exception("Not yet implemented");
             //todo sigs

@@ -1,5 +1,6 @@
 ﻿using Cascade.CodeAnalysis.Common.Extensions;
 using Cascade.CodeAnalysis.Common.Simulation;
+using Cascade.CodeAnalysis.Graph;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -347,7 +348,7 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
             if (eval is Instance inst)
             {
                 ISymbol s = node.GetReference().GetDeclaringSymbol(_comp);
-                inst.Identities.Push(new Identity(s, frame, node.Identifier.ValueText));
+                inst.Identities.Push(new Identity(s, Node<Evaluation>.Kind.LocalVariable, frame, node.Identifier.ValueText));
             }
             else
             {

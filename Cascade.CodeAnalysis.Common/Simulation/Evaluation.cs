@@ -8,7 +8,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
 {
     public interface Evaluation
     {
-        Node Node { get; }
+        Node<Evaluation> Node { get; }
     }
 
     public static class EvaluationUtil

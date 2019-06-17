@@ -16,7 +16,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
         public ISymbol Symbol { get; }
         public ICollection<Instance> Instances { get; }
         public Heap ContainingHeap { get; }
-        public Node Node { get; set; }
+        public abstract Node<Evaluation> Node { get; }
 
         internal Frame(ISymbol symbol, Heap containingHeap)
         {
@@ -31,36 +31,36 @@ namespace Cascade.CodeAnalysis.Common.Simulation
             ContainingHeap = containingHeap;
         }
 
-        public Instance CreateInstance(ITypeSymbol instanceType)
+        public Instance CreateInstance(ITypeSymbol instanceType, Node<Evaluation>.Kind kind)
         {
-            Instance instance = new Instance(this, instanceType);
+            Instance instance = new Instance(this, instanceType, kind);
             Instances.Add(instance);
             return instance;
         }
 
-        public Instance CreateInstance(Identity identity)
+        public Instance CreateInstance(Identity identity, Node<Evaluation>.Kind kind)
         {
-            Instance instance = new Instance(this, identity.Type);
+            Instance instance = new Instance(this, identity.Type, kind);
             instance.Identities.Push(identity);
             Instances.Add(instance);
 
             return instance;
         }
 
-        public Instance CreateInstance(ISymbol instanceDecl, ITypeSymbol instanceType, string identifier = null)
+        public Instance CreateInstance(ISymbol instanceDecl, ITypeSymbol instanceType, Node<Evaluation>.Kind kind, string identifier = null)
         {
-            Instance instance = new Instance(this, instanceType);
-            instance.Identities.Push(new Identity(instanceDecl, this, identifier));
+            Instance instance = new Instance(this, instanceType, kind);
+            instance.Identities.Push(new Identity(instanceDecl, kind, this, identifier));
             Instances.Add(instance);
 
             return instance;
         }
 
-        public Instance CreateInstance(SyntaxReference reference, Compilation compilation, ITypeSymbol instanceType,
+        public Instance CreateInstance(SyntaxReference reference, Compilation compilation, ITypeSymbol instanceType, Node<Evaluation>.Kind kind,
             string identifier = null)
         {
-            Instance instance = new Instance(this, instanceType);
-            instance.Identities.Push(new Identity(reference, compilation, this, identifier));
+            Instance instance = new Instance(this, instanceType, kind);
+            instance.Identities.Push(new Identity(reference, compilation, kind, this, identifier));
             Instances.Add(instance);
 
             return instance;
