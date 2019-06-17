@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cascade.CodeAnalysis.Common.Extensions;
 using Cascade.CodeAnalysis.Common.Simulation;
+using Cascade.CodeAnalysis.Graph;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -209,8 +210,7 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
             if (declaringSymbol.IsStatic)
             {
                 //static method calls have no "instance"
-                Heap tmpHeap = new Heap("static");//TODO - static heaps?
-                newFrame = tmpHeap.CreateFrame(methReference, _comp, declaringSymbol.NodeKind());
+                newFrame = StaticInstance.InstanceHeap.CreateFrame(methReference, _comp, declaringSymbol.NodeKind());
             }
             else
             {
@@ -225,6 +225,7 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
                 newFrame = instance.InstanceHeap.CreateFrame(methReference, _comp, declaringSymbol.NodeKind());
             }
 
+            //TODO link expression target to invocation
             SimulateFrame(newFrame, EvaluationUtil.From<Instance>(args).ToArray());
 
             return base.VisitInvocationExpression(node);
@@ -269,9 +270,14 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
             ITypeSymbol type = node.Type.GetSymbol(_comp) as ITypeSymbol;
             
             Instance instance = _callStack.Peek().CreateInstance(type, type.NodeKind());
+
+            GraphBuilder<Evaluation>.From(_callStack.Peek().Node).Kind(Edge<Evaluation>.Kind.CreatesObject).To(instance.Node);
+
             InitializeInstance(instance);
 
             FunctionalFrame constructor = instance.InstanceHeap.CreateFrame(node.GetReference(), _comp, type.NodeKind());
+
+            GraphBuilder<Evaluation>.From(instance.Node).Kind(Edge<Evaluation>.Kind.InvokesMember).To(constructor.Node);
 
             SimulateFrame(constructor, EvaluationUtil.From<Instance>(accept).ToArray());
 

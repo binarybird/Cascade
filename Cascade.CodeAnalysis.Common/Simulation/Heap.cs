@@ -9,7 +9,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
 {
     public class Heap
     {
-        public Instance OwningInstance { get; }
+        public Instance OwningInstance { get; private set; }
         public IList<FunctionalFrame> FunctionalFrames;
         public ObjectFrame ObjectFrame { get; }
 
@@ -31,6 +31,11 @@ namespace Cascade.CodeAnalysis.Common.Simulation
                 //root "instance"
                 ObjectFrame = new ObjectFrame("Object", this, Node<Evaluation>.Kind.Class);
             }
+        }
+
+        internal void SetOwningInstance(Instance instance)
+        {
+            OwningInstance = instance;
         }
 
         public FunctionalFrame CreateFrame(SyntaxReference reference, Compilation compilation, Node<Evaluation>.Kind kind)

@@ -54,9 +54,15 @@ namespace Cascade.CodeAnalysis.Common.Simulation
         {
             DeclaringFrame = declaringFrame;
             DeclaredType = declaringType ?? throw new ArgumentNullException(nameof(declaringType));
-            InstanceHeap = instanceHeap ?? throw new ArgumentNullException(nameof(declaringType));
+            InstanceHeap = instanceHeap ?? throw new ArgumentNullException(nameof(instanceHeap));
             HasBeenInitialized = false;
             Node = new Node<Evaluation>(kind, this);
+
+            //TODO - key word usage, cyclic heap/instance relationship - static heaps have no instance
+            if (InstanceHeap.ObjectFrame.ObjectSignature.Equals("static"))
+            {
+                InstanceHeap.SetOwningInstance(this);
+            }
         }
 
         public override string ToString()
