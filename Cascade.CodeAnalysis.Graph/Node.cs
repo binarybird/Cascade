@@ -33,7 +33,6 @@ namespace Cascade.CodeAnalysis.Graph
             NodeKind = kind;
             NodeInfo = nodeInfo;
         }
-
         internal Edge<T> AddEdge(Edge<T>.Kind kind, params Node<T>[] to)
         {
             if (to == null || to.Length == 0)
@@ -44,6 +43,11 @@ namespace Cascade.CodeAnalysis.Graph
             Edge<T> edge = new Edge<T>(kind, this, to);
             _edges.Add(edge);
             return edge;
+        }
+
+        public override string ToString()
+        {
+            return $"Node[Kind=\"{NodeKind}\"]";
         }
     }
 }

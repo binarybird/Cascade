@@ -20,7 +20,7 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
         private readonly Compilation _comp;
         private readonly SyntaxNode _entryPoint;
 
-        public Instance RootInstance { get; }
+        public Instance StaticInstance { get; }
         public Frame EntryFrame { get; }
 
         public Simulator(Compilation comp, SyntaxNode entryPoint)
@@ -28,12 +28,13 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
             this._comp = comp;
             this._entryPoint = entryPoint;
 
-            RootInstance = new Instance(new Heap("root"), null, entryPoint.GetSymbol(_comp).ContainingType, Node<Evaluation>.Kind.Root);
-            EntryFrame = RootInstance.InstanceHeap.CreateFrame(_entryPoint.GetReference(), _comp, Node<Evaluation>.Kind.Root);
+            StaticInstance = new Instance(new Heap("static"), null, entryPoint.GetSymbol(_comp).ContainingType, Node<Evaluation>.Kind.Root);
 
-            GraphBuilder<Evaluation>.From(RootInstance.Node).Kind(Edge<Evaluation>.Kind.CreatesObject).To(RootInstance.Node);
+            EntryFrame = StaticInstance.InstanceHeap.CreateFrame(_entryPoint.GetReference(), _comp, Node<Evaluation>.Kind.Root);
 
-            InitializeInstance(RootInstance);
+            GraphBuilder<Evaluation>.From(StaticInstance.Node).Kind(Edge<Evaluation>.Kind.CreatesObject).To(StaticInstance.Node);
+
+            InitializeInstance(StaticInstance);
         }
 
         public void SimulateFrame(Frame frame, params Instance[] args)
@@ -60,6 +61,8 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
                 {
                     Identity newArgIdent = functionalFrame.DeclaredArguments[i];
                     Instance incommingInstance = args[i];
+
+                    GraphBuilder<Evaluation>.From(functionalFrame.Node).Kind(Edge<Evaluation>.Kind.Declares).To(incommingInstance.Node);
 
                     newArgIdent.IsDisposed = false;
                     incommingInstance.Identities.Push(newArgIdent);

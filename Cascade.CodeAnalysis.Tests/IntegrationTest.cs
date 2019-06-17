@@ -64,7 +64,7 @@ namespace Cascade.CodeAnalysis.Tests
 
                 sim.SimulateFrame(sim.EntryFrame, new Instance(arr, Node<Evaluation>.Kind.Root));
 
-                simGraphs.Add(sim.RootInstance.Node);
+                simGraphs.Add(sim.StaticInstance.Node);
             }
 
             int y = 0;

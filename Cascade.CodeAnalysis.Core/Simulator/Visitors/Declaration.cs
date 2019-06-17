@@ -264,6 +264,9 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
 
         public override Evaluation VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
+            Node<Evaluation> owningInstanceNode = _callStack.Peek().ContainingHeap.OwningInstance.Node;
+            GraphBuilder<Evaluation>.From(owningInstanceNode).Kind(Edge<Evaluation>.Kind.Declares).To(_callStack.Peek().Node);
+
             //todo assert node == frame
             foreach (AttributeListSyntax attributeList in node.AttributeLists)
             {
