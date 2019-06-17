@@ -13,7 +13,8 @@ variables:
   solution: '**/Cascade.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-
+  
+steps:
 - task: DotNetCoreInstaller@0
   inputs:
     version: '2.1.700'
