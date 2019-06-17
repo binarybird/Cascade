@@ -43,6 +43,8 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
                 throw new ArgumentNullException(nameof(frame));
             }
 
+            //TODO - if a frame has already been simulated, connect the graph instead
+
             Log.Info("Simulating {0}", frame.ToString());
 
             FunctionalFrame functionalFrame = frame as FunctionalFrame;
