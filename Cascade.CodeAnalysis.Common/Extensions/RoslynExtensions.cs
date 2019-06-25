@@ -15,31 +15,31 @@ namespace Cascade.CodeAnalysis.Common.Extensions
             memberOptions: SymbolDisplayMemberOptions.IncludeContainingType | SymbolDisplayMemberOptions.IncludeType,
             typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);
 
-        public static Node<Evaluation>.Kind NodeKind(this ISymbol symb)
+        public static NodeKind ToNodeKind(this ISymbol symb)
         {
             if (symb is ILocalSymbol local)
             {
-                return Node<Evaluation>.Kind.LocalVariable;
+                return NodeKind.LocalVariable;
             }
             else if (symb is IFieldSymbol field)
             {
-                return Node<Evaluation>.Kind.Field;
+                return NodeKind.Field;
             }
             else if (symb is IPropertySymbol prop)
             {
-                return Node<Evaluation>.Kind.Property;
+                return NodeKind.Property;
             }
             else if (symb is IParameterSymbol param)
             {
-                return Node<Evaluation>.Kind.LocalVariable;
+                return NodeKind.LocalVariable;
             }
             else if (symb is ITypeSymbol type)
             { 
-                return Node<Evaluation>.Kind.Class;
+                return NodeKind.Class;
             }
             else if (symb is IMethodSymbol meth)
             {
-                return Node<Evaluation>.Kind.Functional;
+                return NodeKind.Functional;
             }
             else
             {

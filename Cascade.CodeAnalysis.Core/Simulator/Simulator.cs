@@ -28,11 +28,11 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
             this._comp = comp;
             this._entryPoint = entryPoint;
 
-            StaticInstance = new Instance(new Heap("static"), null, entryPoint.GetSymbol(_comp).ContainingType, Node<Evaluation>.Kind.Root);
+            StaticInstance = new Instance(new Heap("static"), null, entryPoint.GetSymbol(_comp).ContainingType, NodeKind.Root);
 
-            EntryFrame = StaticInstance.InstanceHeap.CreateFrame(_entryPoint.GetReference(), _comp, Node<Evaluation>.Kind.Root);
+            EntryFrame = StaticInstance.InstanceHeap.CreateFrame(_entryPoint.GetReference(), _comp, NodeKind.Root);
 
-            GraphBuilder<Evaluation>.From(StaticInstance.Node).Kind(Edge<Evaluation>.Kind.CreatesObject).To(StaticInstance.Node);
+            GraphBuilder<Evaluation>.From(StaticInstance.Node).Kind(EdgeKind.CreatesObject).To(StaticInstance.Node);
 
             InitializeInstance(StaticInstance);
         }
@@ -62,7 +62,7 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
                     Identity newArgIdent = functionalFrame.DeclaredArguments[i];
                     Instance incommingInstance = args[i];
 
-                    GraphBuilder<Evaluation>.From(functionalFrame.Node).Kind(Edge<Evaluation>.Kind.Declares).To(incommingInstance.Node);
+                    GraphBuilder<Evaluation>.From(functionalFrame.Node).Kind(EdgeKind.Declares).To(incommingInstance.Node);
 
                     newArgIdent.IsDisposed = false;
                     incommingInstance.Identities.Push(newArgIdent);
@@ -110,8 +110,8 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
                     continue;
                 }
 
-                Identity ident = new Identity(member, member.NodeKind(), instance.InstanceHeap.ObjectFrame);
-                instance.InstanceHeap.ObjectFrame.CreateInstance(ident, member.NodeKind());
+                Identity ident = new Identity(member, member.ToNodeKind(), instance.InstanceHeap.ObjectFrame);
+                instance.InstanceHeap.ObjectFrame.CreateInstance(ident, member.ToNodeKind());
             }
         }
 
@@ -135,8 +135,8 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
                     continue;
                 }
 
-                Identity ident = new Identity(member, member.NodeKind(), instance.InstanceHeap.ObjectFrame);
-                instance.InstanceHeap.ObjectFrame.CreateInstance(ident, member.NodeKind());
+                Identity ident = new Identity(member, member.ToNodeKind(), instance.InstanceHeap.ObjectFrame);
+                instance.InstanceHeap.ObjectFrame.CreateInstance(ident, member.ToNodeKind());
             }
 
             instance.HasBeenInitialized = true;

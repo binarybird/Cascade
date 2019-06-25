@@ -9,7 +9,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
 
         public EvaluationList()
         {
-            Node = new Node<Evaluation>(Node<Evaluation>.Kind.Collection, this);
+            Node = new Node<Evaluation>(NodeKind.Collection, this);
         }
     }
 }

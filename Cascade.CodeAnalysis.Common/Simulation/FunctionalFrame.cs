@@ -12,7 +12,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
         public Identity[] DeclaredArguments { get; }
         public override Node<Evaluation> Node { get; }
 
-        public FunctionalFrame(ISymbol symbol, Heap containingHeap, Node<Evaluation>.Kind kind, params Identity[] args) : base(symbol, containingHeap)
+        public FunctionalFrame(ISymbol symbol, Heap containingHeap, NodeKind kind, params Identity[] args) : base(symbol, containingHeap)
         {
             IMethodSymbol methSymb = symbol as IMethodSymbol;
             if (methSymb == null)
@@ -34,7 +34,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
                 argument.Frame = this;
             }
         }
-        public FunctionalFrame(string signature, string returnType, string recieverType, Heap containingHeap, Node<Evaluation>.Kind kind, params Identity[] args) : base(containingHeap)
+        public FunctionalFrame(string signature, string returnType, string recieverType, Heap containingHeap, NodeKind kind, params Identity[] args) : base(containingHeap)
         {
             throw new Exception("Not yet implemented");
             //todo sigs

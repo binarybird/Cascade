@@ -32,7 +32,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
         public bool HasBeenInitialized { get; set; }
         public Node<Evaluation> Node { get; }
 
-        public Instance(ITypeSymbol declaringType, Node<Evaluation>.Kind kind)
+        public Instance(ITypeSymbol declaringType, NodeKind kind)
         {
             DeclaredType = declaringType ?? throw new ArgumentNullException(nameof(declaringType));
             InstanceHeap = new Heap(this);
@@ -41,7 +41,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
             Node = new Node<Evaluation>(kind, this);
         }
 
-        public Instance(Frame declaringFrame, ITypeSymbol declaringType, Node<Evaluation>.Kind kind)
+        public Instance(Frame declaringFrame, ITypeSymbol declaringType, NodeKind kind)
         {
             DeclaringFrame = declaringFrame;
             DeclaredType = declaringType ?? throw new ArgumentNullException(nameof(declaringType));
@@ -50,7 +50,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
             Node = new Node<Evaluation>(kind, this);
         }
 
-        public Instance(Heap instanceHeap, Frame declaringFrame, ITypeSymbol declaringType, Node<Evaluation>.Kind kind)
+        public Instance(Heap instanceHeap, Frame declaringFrame, ITypeSymbol declaringType, NodeKind kind)
         {
             DeclaringFrame = declaringFrame;
             DeclaredType = declaringType ?? throw new ArgumentNullException(nameof(declaringType));
