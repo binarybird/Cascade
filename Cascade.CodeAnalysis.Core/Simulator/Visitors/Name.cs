@@ -26,7 +26,7 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
         public override Evaluation VisitIdentifierName(IdentifierNameSyntax node)
         {
             ISymbol info = node.GetSymbolInfo(_comp).Symbol;
-            return new Identity(info, info?.NodeKind() ?? Node<Evaluation>.Kind.LocalVariable, _callStack.Peek(), node.Identifier.ValueText);
+            return new Identity(info, info?.ToNodeKind() ?? NodeKind.LocalVariable, _callStack.Peek(), node.Identifier.ValueText);
         }
 
         public override Evaluation VisitNameColon(NameColonSyntax node)

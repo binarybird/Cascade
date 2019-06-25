@@ -265,7 +265,7 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
         public override Evaluation VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
             Node<Evaluation> owningInstanceNode = _callStack.Peek().ContainingHeap.OwningInstance.Node;
-            GraphBuilder<Evaluation>.From(owningInstanceNode).Kind(Edge<Evaluation>.Kind.Declares).To(_callStack.Peek().Node);
+            GraphBuilder<Evaluation>.From(owningInstanceNode).Kind(EdgeKind.Declares).To(_callStack.Peek().Node);
 
             //todo assert node == frame
             foreach (AttributeListSyntax attributeList in node.AttributeLists)
@@ -351,7 +351,7 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
             if (eval is Instance inst)
             {
                 ISymbol s = node.GetReference().GetDeclaringSymbol(_comp);
-                inst.Identities.Push(new Identity(s, Node<Evaluation>.Kind.LocalVariable, frame, node.Identifier.ValueText));
+                inst.Identities.Push(new Identity(s, NodeKind.LocalVariable, frame, node.Identifier.ValueText));
             }
             else
             {

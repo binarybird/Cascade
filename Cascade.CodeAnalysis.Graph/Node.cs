@@ -8,32 +8,18 @@ namespace Cascade.CodeAnalysis.Graph
 {
     public class Node<T>
     {
-        public enum Kind
-        {
-            Root,
-            Namespace,
-            Class,
-            Functional,
-            Delegate,
-            Property,
-            Field,
-            LocalVariable,
-            Enum,
-            Collection,
-        }
-
-        public Kind NodeKind { get; }
+        public NodeKind NodeKind { get; }
         public T NodeInfo { get; }
 
         public IReadOnlyList<Edge<T>> Edges => _edges.AsReadOnly();
         private readonly List<Edge<T>> _edges = new List<Edge<T>>();
 
-        public Node(Kind kind, T nodeInfo = default(T))
+        public Node(NodeKind kind, T nodeInfo = default(T))
         {
             NodeKind = kind;
             NodeInfo = nodeInfo;
         }
-        internal Edge<T> AddEdge(Edge<T>.Kind kind, params Node<T>[] to)
+        internal Edge<T> AddEdge(EdgeKind kind, params Node<T>[] to)
         {
             if (to == null || to.Length == 0)
             {

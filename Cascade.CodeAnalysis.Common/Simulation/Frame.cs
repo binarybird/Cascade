@@ -31,14 +31,14 @@ namespace Cascade.CodeAnalysis.Common.Simulation
             ContainingHeap = containingHeap;
         }
 
-        public Instance CreateInstance(ITypeSymbol instanceType, Node<Evaluation>.Kind kind)
+        public Instance CreateInstance(ITypeSymbol instanceType, NodeKind kind)
         {
             Instance instance = new Instance(this, instanceType, kind);
             Instances.Add(instance);
             return instance;
         }
 
-        public Instance CreateInstance(Identity identity, Node<Evaluation>.Kind kind)
+        public Instance CreateInstance(Identity identity, NodeKind kind)
         {
             Instance instance = new Instance(this, identity.Type, kind);
             instance.Identities.Push(identity);
@@ -47,7 +47,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
             return instance;
         }
 
-        public Instance CreateInstance(ISymbol instanceDecl, ITypeSymbol instanceType, Node<Evaluation>.Kind kind, string identifier = null)
+        public Instance CreateInstance(ISymbol instanceDecl, ITypeSymbol instanceType, NodeKind kind, string identifier = null)
         {
             Instance instance = new Instance(this, instanceType, kind);
             instance.Identities.Push(new Identity(instanceDecl, kind, this, identifier));
@@ -56,7 +56,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
             return instance;
         }
 
-        public Instance CreateInstance(SyntaxReference reference, Compilation compilation, ITypeSymbol instanceType, Node<Evaluation>.Kind kind,
+        public Instance CreateInstance(SyntaxReference reference, Compilation compilation, ITypeSymbol instanceType, NodeKind kind,
             string identifier = null)
         {
             Instance instance = new Instance(this, instanceType, kind);

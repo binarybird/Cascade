@@ -31,11 +31,11 @@ namespace Cascade.CodeAnalysis.Common.Simulation
         public ITypeSymbol Type { get; private set; }
         public Node<Evaluation> Node { get; }
 
-        public Identity(SyntaxReference reference, Compilation compilation, Node<Evaluation>.Kind kind, Frame frame = null, string manualIdentifier = null) : this(reference.GetSymbol(compilation), kind, frame, manualIdentifier)
+        public Identity(SyntaxReference reference, Compilation compilation, NodeKind kind, Frame frame = null, string manualIdentifier = null) : this(reference.GetSymbol(compilation), kind, frame, manualIdentifier)
         {
         }
             
-        public Identity(ISymbol symbol, Node<Evaluation>.Kind kind, Frame frame = null, string manualIdentifier = null)
+        public Identity(ISymbol symbol, NodeKind kind, Frame frame = null, string manualIdentifier = null)
         {
             Frame = frame;
             _symbol = symbol;

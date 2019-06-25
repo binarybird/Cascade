@@ -15,7 +15,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
 
         public Heap(string objectName)
         {
-            ObjectFrame = new ObjectFrame(objectName, this, Node<Evaluation>.Kind.Class);
+            ObjectFrame = new ObjectFrame(objectName, this, NodeKind.Class);
         }
 
         public Heap(Instance owningInstance)
@@ -24,12 +24,12 @@ namespace Cascade.CodeAnalysis.Common.Simulation
 
             if (owningInstance.Identities.Count != 0)
             {
-                ObjectFrame = new ObjectFrame(owningInstance.Identities.Peek()?.Type, this, Node<Evaluation>.Kind.Class);
+                ObjectFrame = new ObjectFrame(owningInstance.Identities.Peek()?.Type, this, NodeKind.Class);
             }
             else
             {
                 //root "instance"
-                ObjectFrame = new ObjectFrame("Object", this, Node<Evaluation>.Kind.Class);
+                ObjectFrame = new ObjectFrame("Object", this, NodeKind.Class);
             }
         }
 
@@ -38,7 +38,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
             OwningInstance = instance;
         }
 
-        public FunctionalFrame CreateFrame(SyntaxReference reference, Compilation compilation, Node<Evaluation>.Kind kind)
+        public FunctionalFrame CreateFrame(SyntaxReference reference, Compilation compilation, NodeKind kind)
         {
             ISymbol symbol = reference.GetSymbol(compilation);
             if (!(symbol is IMethodSymbol meth))

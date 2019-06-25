@@ -7,7 +7,7 @@ namespace Cascade.CodeAnalysis.Graph
     public class GraphBuilder<T>
     {
         private Node<T> _node;
-        private Edge<T>.Kind _kind;
+        private EdgeKind _kind;
 
         public static GraphBuilder<T> From(Node<T> node)
         {
@@ -18,7 +18,7 @@ namespace Cascade.CodeAnalysis.Graph
             return builder;
         }
 
-        public GraphBuilder<T> Kind(Edge<T>.Kind kind)
+        public GraphBuilder<T> Kind(EdgeKind kind)
         {
             if (kind == default)
             {

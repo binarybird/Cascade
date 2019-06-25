@@ -62,7 +62,7 @@ namespace Cascade.CodeAnalysis.Tests
 
                 INamedTypeSymbol arr = comp.GetSpecialType(SpecialType.System_Array);//TODO - array as instance?
 
-                sim.SimulateFrame(sim.EntryFrame, new Instance(arr, Node<Evaluation>.Kind.Root));
+                sim.SimulateFrame(sim.EntryFrame, new Instance(arr, NodeKind.Root));
 
                 simGraphs.Add(sim.StaticInstance.Node);
             }

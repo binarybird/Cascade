@@ -10,7 +10,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
         public string ObjectSignature { get; }
         public override Node<Evaluation> Node { get; }
 
-        public ObjectFrame(ISymbol symbol, Heap containingHeap, Node<Evaluation>.Kind kind) : base(symbol, containingHeap)
+        public ObjectFrame(ISymbol symbol, Heap containingHeap, NodeKind kind) : base(symbol, containingHeap)
         {
             ITypeSymbol typeSymbol = symbol as ITypeSymbol;
             if (typeSymbol == null)
@@ -22,7 +22,7 @@ namespace Cascade.CodeAnalysis.Common.Simulation
             Node = new Node<Evaluation>(kind, this);
         }
 
-        public ObjectFrame(string objectSignature, Heap containingHeap, Node<Evaluation>.Kind kind) : base(containingHeap)
+        public ObjectFrame(string objectSignature, Heap containingHeap, NodeKind kind) : base(containingHeap)
         {
             ObjectSignature = objectSignature;
             Node = new Node<Evaluation>(kind, this);

@@ -78,7 +78,7 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
                 throw new Exception("Unable to resolve parameter");
             }
 
-            Identity ident = new Identity(symb, Node<Evaluation>.Kind.LocalVariable, frame, node.Identifier.ValueText);
+            Identity ident = new Identity(symb, NodeKind.LocalVariable, frame, node.Identifier.ValueText);
             ICollection<Instance> findInstance = frame.FindLocalInstance(ident).ToList();
             Instance instance = null;
             if (findInstance.Any())
@@ -87,7 +87,7 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
             }
             else
             {
-                instance = frame.CreateInstance(ident, Node<Evaluation>.Kind.LocalVariable);
+                instance = frame.CreateInstance(ident, NodeKind.LocalVariable);
                 Log.Error("Unable to find argument instance! Creating new instance {0}", instance.ToString());
             }
 

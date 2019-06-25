@@ -210,7 +210,7 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
             if (declaringSymbol.IsStatic)
             {
                 //static method calls have no "instance"
-                newFrame = StaticInstance.InstanceHeap.CreateFrame(methReference, _comp, declaringSymbol.NodeKind());
+                newFrame = StaticInstance.InstanceHeap.CreateFrame(methReference, _comp, declaringSymbol.ToNodeKind());
             }
             else
             {
@@ -222,7 +222,7 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
                 }
 
                 Instance instance = findInstance.FirstOrDefault();
-                newFrame = instance.InstanceHeap.CreateFrame(methReference, _comp, declaringSymbol.NodeKind());
+                newFrame = instance.InstanceHeap.CreateFrame(methReference, _comp, declaringSymbol.ToNodeKind());
             }
 
             //TODO link expression target to invocation
@@ -269,15 +269,15 @@ namespace Cascade.CodeAnalysis.Core.Simulator.Visitors
 
             ITypeSymbol type = node.Type.GetSymbol(_comp) as ITypeSymbol;
             
-            Instance instance = _callStack.Peek().CreateInstance(type, type.NodeKind());
+            Instance instance = _callStack.Peek().CreateInstance(type, type.ToNodeKind());
 
-            GraphBuilder<Evaluation>.From(_callStack.Peek().Node).Kind(Edge<Evaluation>.Kind.CreatesObject).To(instance.Node);
+            GraphBuilder<Evaluation>.From(_callStack.Peek().Node).Kind(EdgeKind.CreatesObject).To(instance.Node);
 
             InitializeInstance(instance);
 
-            FunctionalFrame constructor = instance.InstanceHeap.CreateFrame(node.GetReference(), _comp, type.NodeKind());
+            FunctionalFrame constructor = instance.InstanceHeap.CreateFrame(node.GetReference(), _comp, type.ToNodeKind());
 
-            GraphBuilder<Evaluation>.From(instance.Node).Kind(Edge<Evaluation>.Kind.InvokesMember).To(constructor.Node);
+            GraphBuilder<Evaluation>.From(instance.Node).Kind(EdgeKind.InvokesMember).To(constructor.Node);
 
             SimulateFrame(constructor, EvaluationUtil.From<Instance>(accept).ToArray());
 
