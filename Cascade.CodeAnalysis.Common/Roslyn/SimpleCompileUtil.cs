@@ -31,6 +31,7 @@ namespace Cascade.CodeAnalysis.Common.Roslyn
         {
             List<MetadataReference> ret = new List<MetadataReference>();
 
+            //We are using Buildalyzer because it is xplat
             AnalyzerManager manager = new AnalyzerManager(solution.FullName);
             foreach (KeyValuePair<string, ProjectAnalyzer> proj in manager.Projects)
             {
@@ -43,13 +44,43 @@ namespace Cascade.CodeAnalysis.Common.Roslyn
                 }
 
                 AnalyzerResults results = analyzer.Build();
-                foreach (string filePath in results.SelectMany(s=>s.References))
+                foreach (string filePath in results.SelectMany(s=>s.References))//TODO - are these all references? Research needed
                 {
                     if (!File.Exists(filePath))
                     {
                         Log.Warn("Library {0} is missing. Did you restore the Solution libraries?");
                     }
                     ret.Add(MetadataReference.CreateFromFile(filePath));
+                }
+            }
+
+            return ret.ToArray();
+        }
+
+        public static FileInfo[] GetSourcesFromSolution(FileInfo solution)
+        {
+            List<FileInfo> ret = new List<FileInfo>();
+
+            //We are using Buildalyzer because it is xplat
+            AnalyzerManager manager = new AnalyzerManager(solution.FullName);
+            foreach (KeyValuePair<string, ProjectAnalyzer> proj in manager.Projects)
+            {
+                ProjectAnalyzer analyzer = proj.Value;
+                analyzer.IgnoreFaultyImports = true;
+                if (analyzer.ProjectFile.RequiresNetFramework)
+                {
+                    throw new Exception(
+                        ".NET Framework Solutions not supported. Please use a .NET Core Solution instead.");
+                }
+
+                AnalyzerResults results = analyzer.Build();
+                foreach (string filePath in results.SelectMany(s => s.SourceFiles))
+                {
+                    if (!File.Exists(filePath))
+                    {
+                        Log.Warn("Source file {0} is missing.");
+                    }
+                    ret.Add(new FileInfo(filePath));
                 }
             }
 
