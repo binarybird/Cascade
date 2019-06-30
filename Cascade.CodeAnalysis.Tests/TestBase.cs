@@ -6,7 +6,7 @@ using Xunit.Abstractions;
 
 namespace Cascade.CodeAnalysis.Tests
 {
-    public class TestBase
+    public abstract class TestBase
     {
         internal TestBase(ITestOutputHelper outputHelper)
         {

@@ -1,5 +1,6 @@
+﻿using System;
 using System.Collections.Generic;
-using Cascade.CodeAnalysis.Common.Roslyn;
+using System.Text;
 using Cascade.CodeAnalysis.Common.Simulation;
 using Cascade.CodeAnalysis.Core.Simulator.Visitors;
 using Cascade.CodeAnalysis.Graph;
@@ -9,10 +10,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Cascade.CodeAnalysis.Tests
+namespace Cascade.CodeAnalysis.Tests.Graph.Adapter
 {
-    public class IntegrationTest : IntegrationTestBase
-    {
+    public class Neo4j : IntegrationTestBase
+    { 
         private static readonly string SomeCode =
             "using System;\n" +
             "namespace Org.Gscx.Analysis.Cli\n" +
@@ -37,9 +38,8 @@ namespace Cascade.CodeAnalysis.Tests
             "}\n" +
             "}";
 
-        public IntegrationTest(ITestOutputHelper outputHelper) : base(outputHelper)
+        public Neo4j(ITestOutputHelper outputHelper) : base(outputHelper)
         {
-
         }
 
         [Fact]
@@ -65,7 +65,8 @@ namespace Cascade.CodeAnalysis.Tests
                 simGraphs.Add(sim.StaticInstance.Node);
             }
 
-            int y = 0;
+
+
         }
     }
 }
